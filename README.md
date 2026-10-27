@@ -211,11 +211,7 @@ powershell -NoProfile -File scripts/smoke-test.ps1
 - [执行期限与 Worker 租约](docs/phase4b-verification.md)
 - [HTTP 模型适配](docs/phase4c-verification.md)
 
-## 已知限制
 
-当前项目是用于展示异步任务处理与故障边界的后端工程原型，不是完整的生产级 AI 平台。
-
-目前不包含生产认证与租户隔离、Broker 高可用集群、规模化负载验证、完整监控告警和自动故障恢复平台。执行期限不能撤销已经发出的模型请求，消息派发状态也不等同于任务执行成功。
 
 ## 许可证
 
@@ -223,4 +219,3 @@ powershell -NoProfile -File scripts/smoke-test.ps1
 
 第三方依赖及其法律文本仍适用各自许可证，不因本项目授权而变更。详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 和 [依赖许可证审查](docs/DEPENDENCY_LICENSE_REVIEW.md)。
 
-本次公开范围为 **SOURCE_ONLY**：源码、测试、配置示例、SQL 及文档；不发布打包 JAR、依赖缓存或容器镜像。
