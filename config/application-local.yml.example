@@ -1,0 +1,8 @@
+# Copy to config/application-local.yml, then enable with --spring.profiles.active=local.
+server:
+  address: 127.0.0.1
+  port: 8081
+platform:
+  execution:
+    workers: 2
+    queue-capacity: 64

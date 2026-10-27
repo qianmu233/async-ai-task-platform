@@ -1,0 +1,24 @@
+name: p1-ai-task
+services:
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: ai-task-platform-rabbitmq
+    labels:
+      com.ai-task-platform.owner: p1
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME:?Provide RABBITMQ_USERNAME in the process environment}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?Provide RABBITMQ_PASSWORD in the process environment}
+      RABBITMQ_DEFAULT_VHOST: /ai-task-platform
+    ports:
+      - "127.0.0.1:5673:5672"
+      - "127.0.0.1:15673:15672"
+    volumes:
+      - p1-rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+volumes:
+  p1-rabbitmq-data:
+    name: ai-task-platform-rabbitmq-data

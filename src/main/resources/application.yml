@@ -1,0 +1,73 @@
+server:
+  forward-headers-strategy: NONE
+  address: ${SERVER_ADDRESS:127.0.0.1}
+  port: ${SERVER_PORT:8081}
+spring:
+  application:
+    name: ai-task-platform
+  mvc:
+    problemdetails:
+      enabled: false
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  sql:
+    init:
+      mode: never
+platform:
+  acceptance:
+    key-prefix: ${TASK_ACCEPTANCE_KEY_PREFIX:}
+  model:
+    mode: ${MODEL_MODE:mock}
+    base-url: ${MODEL_BASE_URL:}
+    api-key: ${MODEL_API_KEY:}
+    name: ${MODEL_NAME:}
+    connect-timeout-ms: ${MODEL_CONNECT_TIMEOUT_MS:2000}
+    request-timeout-ms: ${MODEL_REQUEST_TIMEOUT_MS:10000}
+    max-response-bytes: ${MODEL_MAX_RESPONSE_BYTES:131072}
+  outbox:
+    enabled: ${TASK_OUTBOX_ENABLED:false}
+    poll-interval-ms: ${TASK_OUTBOX_POLL_INTERVAL_MS:1000}
+    batch-size: ${TASK_OUTBOX_BATCH_SIZE:20}
+    max-attempts: ${TASK_OUTBOX_MAX_ATTEMPTS:8}
+    lease-ms: ${TASK_OUTBOX_LEASE_MS:60000}
+    base-backoff-ms: ${TASK_OUTBOX_BASE_BACKOFF_MS:1000}
+    max-backoff-ms: ${TASK_OUTBOX_MAX_BACKOFF_MS:60000}
+  rate-limit:
+    enabled: ${TASK_RATE_LIMIT_ENABLED:false}
+    max-requests: ${TASK_RATE_LIMIT_MAX_REQUESTS:20}
+    window-ms: ${TASK_RATE_LIMIT_WINDOW_MS:60000}
+    namespace: ${TASK_RATE_LIMIT_NAMESPACE:p1:ai-task:submit:v1}
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6380}
+      username: ${REDIS_USERNAME:default}
+      password: ${REDIS_PASSWORD:}
+      timeout-ms: ${REDIS_TIMEOUT_MS:1000}
+  messaging:
+    mode: ${TASK_MESSAGING_MODE:local}
+    queue-prefix: ${TASK_QUEUE_PREFIX:p1.ai-task}
+    confirm-timeout-ms: ${TASK_CONFIRM_TIMEOUT_MS:5000}
+    consumer-attempts: ${TASK_CONSUMER_ATTEMPTS:3}
+    consumer-backoff-ms: ${TASK_CONSUMER_BACKOFF_MS:1000}
+    listener-auto-startup: true
+    rabbitmq:
+      host: ${RABBITMQ_HOST:127.0.0.1}
+      port: ${RABBITMQ_PORT:5673}
+      username: ${RABBITMQ_USERNAME:}
+      password: ${RABBITMQ_PASSWORD:}
+      virtual-host: ${RABBITMQ_VHOST:/ai-task-platform}
+  storage:
+    mode: ${TASK_STORAGE_MODE:memory}
+    mysql:
+      host: ${AI_TASK_DB_HOST:127.0.0.1}
+      port: ${AI_TASK_DB_PORT:3306}
+      username: ${AI_TASK_DB_USERNAME:}
+      password: ${AI_TASK_DB_PASSWORD:}
+  execution:
+    timeout-enabled: ${TASK_EXECUTION_TIMEOUT_ENABLED:false}
+    timeout-ms: ${TASK_EXECUTION_TIMEOUT_MS:60000}
+    timeout-check-ms: ${TASK_EXECUTION_TIMEOUT_CHECK_MS:1000}
+    timeout-batch-size: ${TASK_EXECUTION_TIMEOUT_BATCH_SIZE:20}
+    workers: ${TASK_WORKERS:2}
+    queue-capacity: ${TASK_QUEUE_CAPACITY:64}

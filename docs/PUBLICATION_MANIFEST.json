@@ -1,0 +1,1088 @@
+{
+  "schema": "p1-independent-publication-candidate-v1",
+  "publication_status": "READY_FOR_SOURCE_PUBLICATION",
+  "review_updated": "2026-10-27",
+  "project_license_decision": "USER_CONFIRMED_APACHE_2_0_FOR_AUTHORIZED_OWN_SOURCE",
+  "source_commit": "8f5ddf39c9a192037ec7150915543ef41fbe8ba5",
+  "source_branch": "master",
+  "file_count_including_manifest": 130,
+  "no_inherited_git_history": true,
+  "excluded_source_files": [
+    "AGENTS.md"
+  ],
+  "regenerated_files": [
+    ".gitignore",
+    ".gitattributes"
+  ],
+  "excluded_runtime_categories": [
+    ".git history",
+    "real env/local config",
+    "target",
+    "logs",
+    "databases",
+    "caches",
+    "private keys"
+  ],
+  "manifest_own_hash_excluded": true,
+  "distribution_scope": "SOURCE_ONLY",
+  "project_license": "Apache-2.0",
+  "official_license_evidence": {
+    "official_url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "http_status": 200,
+    "tls_verification": true,
+    "bytes": 11358,
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "sections_1_through_9_and_complete_appendix": true,
+    "official_text_unmodified": true,
+    "SPDX": "Apache-2.0"
+  },
+  "final_license_update_files": [
+    "LICENSE",
+    "README.md",
+    "pom.xml",
+    "THIRD_PARTY_NOTICES.md",
+    "docs/PUBLICATION_REVIEW.md",
+    "docs/DEPENDENCY_LICENSE_REVIEW.md",
+    "docs/SOURCE_PROVENANCE.md",
+    "docs/PUBLICATION_MANIFEST.json"
+  ],
+  "third_party_external_verification": {
+    "verified": 9,
+    "unverified": 78,
+    "total": 87
+  },
+  "records": [
+    {
+      "path": ".gitattributes",
+      "bytes": 143,
+      "sha256": "275a2b03032494fa376cdc9691f0549452ea38469776a3d3623c387cbc982640",
+      "source_sha256": null,
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 418,
+      "sha256": "ff07dae0c1a84bf742c414bf33de6d0ad5c9993bee5c18db33c622051f0c892c",
+      "source_sha256": null,
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "source_sha256": null,
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "APACHE_2_0_LICENSE_TEXT"
+    },
+    {
+      "path": "README.md",
+      "bytes": 10947,
+      "sha256": "be43c94724c564f2e633d22841be26abbec494a80af50feabd8d797b4c4fe468",
+      "source_sha256": "88b064621c9bd0bdab6f1146a98d01963e3ce1cbe99346e1b1bfee670ccf1936",
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "bytes": 1390,
+      "sha256": "4f887b9513159f5f056bc37c6ce4afd07ecaa928fd508c12c987338da9f39ff0",
+      "source_sha256": null,
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "config/application-local.yml.example",
+      "bytes": 192,
+      "sha256": "bf36f00f6c8e9bc6c892a743de833f629125afda0f59fcf59c662edcae7d8efb",
+      "source_sha256": "bf36f00f6c8e9bc6c892a743de833f629125afda0f59fcf59c662edcae7d8efb",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "config/application-mysql.yml.example",
+      "bytes": 515,
+      "sha256": "9ea599c2843643b948740a4d1a21b8a41ed865c2b8960e0e17928803c6fdc4a8",
+      "source_sha256": "9ea599c2843643b948740a4d1a21b8a41ed865c2b8960e0e17928803c6fdc4a8",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "config/application-rabbit.yml.example",
+      "bytes": 465,
+      "sha256": "a6837a6648fe06abdc71c6b567532cb7cf9ebf8ad808980b6fbed2ecbdfff4f7",
+      "source_sha256": "a6837a6648fe06abdc71c6b567532cb7cf9ebf8ad808980b6fbed2ecbdfff4f7",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "database/001_init.sql",
+      "bytes": 2105,
+      "sha256": "dafc70bdbec08215c7a06662886d122733415f910ac5976c9cc6e16c360c34e1",
+      "source_sha256": "dafc70bdbec08215c7a06662886d122733415f910ac5976c9cc6e16c360c34e1",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "database/002_outbox.sql",
+      "bytes": 2924,
+      "sha256": "0c58b61f3a8b0465ad57ce71ab10115ed96b820cb4791d5b3cc07468011125a9",
+      "source_sha256": "0c58b61f3a8b0465ad57ce71ab10115ed96b820cb4791d5b3cc07468011125a9",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "database/003_worker_lease.sql",
+      "bytes": 1324,
+      "sha256": "c90b6c6f92e84c7c09389a86623d20e5cd2493e70e0de742aa082bd8aa42d40c",
+      "source_sha256": "c90b6c6f92e84c7c09389a86623d20e5cd2493e70e0de742aa082bd8aa42d40c",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/DEPENDENCY_LICENSE_REVIEW.md",
+      "bytes": 6442,
+      "sha256": "c0d516cdac5210cd2cf1b2d105f4bbb3909f611bc3ab2c92500294ec9252f42f",
+      "source_sha256": null,
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/PUBLICATION_REVIEW.md",
+      "bytes": 12077,
+      "sha256": "68f693278d5911cc56b4d288b382d628bb31702e76d37e6690224adb69bc4f32",
+      "source_sha256": null,
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/SOURCE_PROVENANCE.md",
+      "bytes": 3049,
+      "sha256": "ea4fde0c0bdfe70a4b341902ce8c925aab7fc81286d9ed761f475e46459141aa",
+      "source_sha256": null,
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/demo-guide.md",
+      "bytes": 5916,
+      "sha256": "a955d879729e6ec7c552507f6d481274b8f1077a715db92e6170779af09820de",
+      "source_sha256": "4183b20206d7944b12df7293f79bf158e79b28fef8aeb6d1804670660b675a77",
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/mysql-integration-plan.md",
+      "bytes": 12007,
+      "sha256": "d6182026c725e35810047ddcb615806fb7fac5089de90c60c5e4d18eb161668d",
+      "source_sha256": "d6182026c725e35810047ddcb615806fb7fac5089de90c60c5e4d18eb161668d",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/outbox-migration-review.md",
+      "bytes": 6038,
+      "sha256": "46a8d3f9d7d57baa0a980b17fd29d5a9166ca7af11352b0c8abdc5edf53e1df8",
+      "source_sha256": "46a8d3f9d7d57baa0a980b17fd29d5a9166ca7af11352b0c8abdc5edf53e1df8",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/persistence-design.md",
+      "bytes": 9223,
+      "sha256": "9e8e7ba6b8fe048ee00a4e381ea25696eea310064594d001df8de0d6f8519317",
+      "source_sha256": "9e8e7ba6b8fe048ee00a4e381ea25696eea310064594d001df8de0d6f8519317",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/phase1-verification.md",
+      "bytes": 3978,
+      "sha256": "bb7cc575e5319a0e3f397d585db23e48f77d1c952b78e35579e360f14db17740",
+      "source_sha256": "bb7cc575e5319a0e3f397d585db23e48f77d1c952b78e35579e360f14db17740",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/phase2a-verification.md",
+      "bytes": 10698,
+      "sha256": "5cd0cbed13975204463aaca28c4799cea7c205e80fd88984c5cfb217ade0352f",
+      "source_sha256": "5cd0cbed13975204463aaca28c4799cea7c205e80fd88984c5cfb217ade0352f",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/phase2b-verification.md",
+      "bytes": 11918,
+      "sha256": "2f23b0402f073bffa974edbcf13c785f47a05cc1680a80e80956589b305979ff",
+      "source_sha256": "2f23b0402f073bffa974edbcf13c785f47a05cc1680a80e80956589b305979ff",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/phase3a-verification.md",
+      "bytes": 14696,
+      "sha256": "c3d0316ca29e549845dba4e95ab23ba131c5c4329910ee1472db9a15d38c773c",
+      "source_sha256": "c3d0316ca29e549845dba4e95ab23ba131c5c4329910ee1472db9a15d38c773c",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/phase3b-verification.md",
+      "bytes": 9865,
+      "sha256": "08b370c5787cd63327621773517e830057557aafc583c9138e5c17e6fbb72130",
+      "source_sha256": "08b370c5787cd63327621773517e830057557aafc583c9138e5c17e6fbb72130",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/phase4a-verification.md",
+      "bytes": 13523,
+      "sha256": "0616b6f11016823535a714f1cbbefb2cfedfd3a8e9fa40052c33c89b73312c43",
+      "source_sha256": "0616b6f11016823535a714f1cbbefb2cfedfd3a8e9fa40052c33c89b73312c43",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/phase4b-verification.md",
+      "bytes": 10177,
+      "sha256": "c428a6500e62b151dd36ff1d25ad0892ec73cde24debf181d5b3d213151ae93b",
+      "source_sha256": "c428a6500e62b151dd36ff1d25ad0892ec73cde24debf181d5b3d213151ae93b",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/phase4c-verification.md",
+      "bytes": 8273,
+      "sha256": "073c78fd231bdf35edc29b69e5bf490717004475a8e39725df9d6a87a2cfc85d",
+      "source_sha256": "073c78fd231bdf35edc29b69e5bf490717004475a8e39725df9d6a87a2cfc85d",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/phase5-verification.md",
+      "bytes": 9801,
+      "sha256": "d20f632de824d5df8cc9ae65d3617db30ea9536d035bd7ec5ff886548046d262",
+      "source_sha256": "4ec97270f09968768e3c53adfad23fb0834d9938125b598edb305a6a52e4b94e",
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/project-review.md",
+      "bytes": 45775,
+      "sha256": "23f0620e4f612ca4c3f1113e11096231c7f5054f91163f4e6a501c0c254b61bd",
+      "source_sha256": "23f0620e4f612ca4c3f1113e11096231c7f5054f91163f4e6a501c0c254b61bd",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/rabbitmq-design.md",
+      "bytes": 9034,
+      "sha256": "1415c4a5b7d69556e95328f07b6a8efbd00db9e7dcaa030e5f20fb0149050a5e",
+      "source_sha256": "1415c4a5b7d69556e95328f07b6a8efbd00db9e7dcaa030e5f20fb0149050a5e",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/readme-review.md",
+      "bytes": 2166,
+      "sha256": "990e1574cbdbaf077ff6f5cad2a1459efcf1e6950123ed9fb1b6eb975ae574f0",
+      "source_sha256": "4403a687a346e6d3e795b0e53528d38119890b8f07b21a379468f26e185d0570",
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/resume-highlights.md",
+      "bytes": 3610,
+      "sha256": "7580ce03f215a933f665f38625d7064ab901c4a8a2e30cadc151ba1c64474af2",
+      "source_sha256": "7580ce03f215a933f665f38625d7064ab901c4a8a2e30cadc151ba1c64474af2",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/third-party/dependency-inventory.csv",
+      "bytes": 25485,
+      "sha256": "8e5a24b47fb11959a67f40c9f716c176d3c948c776aa57edb94c10dc723c1e61",
+      "source_sha256": null,
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/third-party/dependency-inventory.json",
+      "bytes": 213254,
+      "sha256": "69f580f52e955d57ec014c5f79a50454caf3a2e40a3643f3504388a687536cc9",
+      "source_sha256": null,
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/third-party/licenses/mysql-connector-j-9.7.0-license",
+      "bytes": 82896,
+      "sha256": "75d3a92b08c7bf9476bab5a8661e3abedc081463d85c93251aab60a5e0ad92ce",
+      "source_sha256": null,
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "THIRD_PARTY_LEGAL_TEXT_UNMODIFIED"
+    },
+    {
+      "path": "docs/third-party/packaged-runtime-inventory.json",
+      "bytes": 75972,
+      "sha256": "203c8d8b0bf4643e031b254c8df4e55bcb962d2bbf1338e1462fe51536e0664c",
+      "source_sha256": null,
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/third-party/resolved-dependency-tree.json",
+      "bytes": 25996,
+      "sha256": "be1e1d567955dbd91d2a0be61937bb991bc3c0332fa9f6a56ebf1ef8424df437",
+      "source_sha256": null,
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "docs/worker-lease-migration-review.md",
+      "bytes": 4495,
+      "sha256": "2a0fc8d805a9b791b401b5304fd5344ca0584159627b1df80b458ccf767c94b1",
+      "source_sha256": "2a0fc8d805a9b791b401b5304fd5344ca0584159627b1df80b458ccf767c94b1",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "infra/rabbitmq-compose.yml",
+      "bytes": 769,
+      "sha256": "47dbb477aa72aa7233e1a957a7c3c3f6ccf414683a7631b1ca23b41fad306daa",
+      "source_sha256": "47dbb477aa72aa7233e1a957a7c3c3f6ccf414683a7631b1ca23b41fad306daa",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "infra/redis-compose.yml",
+      "bytes": 1023,
+      "sha256": "ca8d36c30abf99756f78c9acf8e76ea06d742527d6a7880af5d8dc86351f6380",
+      "source_sha256": "ca8d36c30abf99756f78c9acf8e76ea06d742527d6a7880af5d8dc86351f6380",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "pom.xml",
+      "bytes": 9390,
+      "sha256": "6e7770d6e5ee807d6abf3d071c254ac42c1073cf97cfefac4a3facbff2de9e1a",
+      "source_sha256": "fa6e947109d311729c61a132282362100b39d75d024b9f6c292fd5b0e53c79eb",
+      "source": "reviewed-replacement-or-new-audit",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "scripts/smoke-test.ps1",
+      "bytes": 4018,
+      "sha256": "3a80d31f154a85ac546f91e6cf9a11506998333e8a2f8cda8a275e9f1d96e435",
+      "source_sha256": "3a80d31f154a85ac546f91e6cf9a11506998333e8a2f8cda8a275e9f1d96e435",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "scripts/start-platform.ps1",
+      "bytes": 4601,
+      "sha256": "8f79e8a1bbe8c6a1f68abebf413a808c350b4b28a1f098a6f1f37e12bdaa5c00",
+      "source_sha256": "8f79e8a1bbe8c6a1f68abebf413a808c350b4b28a1f098a6f1f37e12bdaa5c00",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "scripts/stop-platform.ps1",
+      "bytes": 1249,
+      "sha256": "2266c0fe68340344c9168d9dce2a099db3e1ac7037f9a673907231d68adb39a8",
+      "source_sha256": "2266c0fe68340344c9168d9dce2a099db3e1ac7037f9a673907231d68adb39a8",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "scripts/support/DatabasePreflight.java",
+      "bytes": 5210,
+      "sha256": "4f99f47557dcdecc43190c67026c8e8cd51770f5ce6bd146e6e45e71f7aba31e",
+      "source_sha256": "4f99f47557dcdecc43190c67026c8e8cd51770f5ce6bd146e6e45e71f7aba31e",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "scripts/support/ScheduledPipelineAcceptance.java",
+      "bytes": 12207,
+      "sha256": "2ddaa96385b3cc5ef4c7907ad1a89b14f959c8136c1196c456c6609111f51e15",
+      "source_sha256": "2ddaa96385b3cc5ef4c7907ad1a89b14f959c8136c1196c456c6609111f51e15",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "scripts/verify-model-http.ps1",
+      "bytes": 409,
+      "sha256": "5c8145620741fed778ceafc41fdb70430d68298571cffec90095311eea9ea1cf",
+      "source_sha256": "5c8145620741fed778ceafc41fdb70430d68298571cffec90095311eea9ea1cf",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "scripts/verify-mysql.ps1",
+      "bytes": 6007,
+      "sha256": "aed4e7f699864cf5f78c27c190083a74af8d1475e98e2ec270bb886d9bef8bcd",
+      "source_sha256": "aed4e7f699864cf5f78c27c190083a74af8d1475e98e2ec270bb886d9bef8bcd",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "scripts/verify-outbox.ps1",
+      "bytes": 7280,
+      "sha256": "2a4063ae89700454fc3bcf9936e68da62f5c62c6b8e2ce3f139210d96741422d",
+      "source_sha256": "2a4063ae89700454fc3bcf9936e68da62f5c62c6b8e2ce3f139210d96741422d",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "scripts/verify-phase5.ps1",
+      "bytes": 6851,
+      "sha256": "ddc076b6aaf2208ee1a5f0ab5b31d063436e1e5b8a75cfce90dfef6aa1c449a8",
+      "source_sha256": "ddc076b6aaf2208ee1a5f0ab5b31d063436e1e5b8a75cfce90dfef6aa1c449a8",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "scripts/verify-rabbit.ps1",
+      "bytes": 7589,
+      "sha256": "081dbdfb2a201b9e4aca6109a7cb460052126ad7dd7d98e9334e44ca3c4d56f7",
+      "source_sha256": "081dbdfb2a201b9e4aca6109a7cb460052126ad7dd7d98e9334e44ca3c4d56f7",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "scripts/verify-redis.ps1",
+      "bytes": 8189,
+      "sha256": "263616c94fe18eb7b0ed3545992dd6c7a8dae081d73e7ec3038ad6d87f37cd53",
+      "source_sha256": "263616c94fe18eb7b0ed3545992dd6c7a8dae081d73e7ec3038ad6d87f37cd53",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "scripts/verify-worker-lease.ps1",
+      "bytes": 4611,
+      "sha256": "6c81e2c7b0163c31fc9a0e04d184444b36be63b53ae9d1745b79b20b811a3d7b",
+      "source_sha256": "6c81e2c7b0163c31fc9a0e04d184444b36be63b53ae9d1745b79b20b811a3d7b",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/AiTaskPlatformApplication.java",
+      "bytes": 958,
+      "sha256": "2dfaeae775acd4f631c07b682973270e01643d486c6a6ad26dc6fdbc827532c5",
+      "source_sha256": "2dfaeae775acd4f631c07b682973270e01643d486c6a6ad26dc6fdbc827532c5",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/api/ApiExceptionHandler.java",
+      "bytes": 3446,
+      "sha256": "b4cf677076e885895b364268978ce140c67f85346f02c1a72dd4e2a9cb68e6f3",
+      "source_sha256": "b4cf677076e885895b364268978ce140c67f85346f02c1a72dd4e2a9cb68e6f3",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/api/TaskController.java",
+      "bytes": 2485,
+      "sha256": "e8604e803995157b26de34d5588428e660d8ec0dfd7600af2946057da2ac10dc",
+      "source_sha256": "e8604e803995157b26de34d5588428e660d8ec0dfd7600af2946057da2ac10dc",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/config/ExecutionConfiguration.java",
+      "bytes": 1278,
+      "sha256": "9f24f24b0f1a3d6972823844a1971a63109a3c1da7b357bc7f4bb14e42b3b0a8",
+      "source_sha256": "9f24f24b0f1a3d6972823844a1971a63109a3c1da7b357bc7f4bb14e42b3b0a8",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/config/MessagingConfiguration.java",
+      "bytes": 6502,
+      "sha256": "07f8b4d0944a5a585ecf84c6e133d63f87fce302bdc8e25246189a7123a9d750",
+      "source_sha256": "07f8b4d0944a5a585ecf84c6e133d63f87fce302bdc8e25246189a7123a9d750",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/config/ModelConfiguration.java",
+      "bytes": 2535,
+      "sha256": "cb99d84ce89895bf540acb057a518f6ba935b52e502ea4c67728c59c694dbef6",
+      "source_sha256": "cb99d84ce89895bf540acb057a518f6ba935b52e502ea4c67728c59c694dbef6",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/config/OutboxConfiguration.java",
+      "bytes": 4009,
+      "sha256": "9a25d426a15ec87e80c308acbd4d622a5df6b5dc2fdaced2919c072f60b0df64",
+      "source_sha256": "9a25d426a15ec87e80c308acbd4d622a5df6b5dc2fdaced2919c072f60b0df64",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/config/StorageConfiguration.java",
+      "bytes": 4534,
+      "sha256": "c82a32c4ac7e4052d2248f0ecf5d45aeb020d07e32077f8ccb09e4fdf7844b9d",
+      "source_sha256": "c82a32c4ac7e4052d2248f0ecf5d45aeb020d07e32077f8ccb09e4fdf7844b9d",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/config/SubmissionRateLimitConfiguration.java",
+      "bytes": 3771,
+      "sha256": "4e2c751a53b84f40894f9dd36084fb83dd66d5c266afdcf0580bfc30b9ccfbb9",
+      "source_sha256": "4e2c751a53b84f40894f9dd36084fb83dd66d5c266afdcf0580bfc30b9ccfbb9",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/config/TaskTimeoutConfiguration.java",
+      "bytes": 2372,
+      "sha256": "06d053144a6706e1bde08191acbdb90ed29decfa8e5f6e6b30405dcb4d94cf82",
+      "source_sha256": "06d053144a6706e1bde08191acbdb90ed29decfa8e5f6e6b30405dcb4d94cf82",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/domain/TaskStatus.java",
+      "bytes": 581,
+      "sha256": "cfbb98659b74a797807496958cc716944d88fd5319349095ab7e4375ecae8515",
+      "source_sha256": "cfbb98659b74a797807496958cc716944d88fd5319349095ab7e4375ecae8515",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/domain/TextTask.java",
+      "bytes": 2117,
+      "sha256": "041cad96a7b42e84b79c74a5eecc967ae000a34b2922e2a1dbb851aebc3b6f2d",
+      "source_sha256": "041cad96a7b42e84b79c74a5eecc967ae000a34b2922e2a1dbb851aebc3b6f2d",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/messaging/ConfirmedRabbitPublisher.java",
+      "bytes": 2548,
+      "sha256": "519419d116b2e7cb369b8697cf783634cf096f716c8d45c03938baae6c5dc6c8",
+      "source_sha256": "519419d116b2e7cb369b8697cf783634cf096f716c8d45c03938baae6c5dc6c8",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/messaging/ConsumerPause.java",
+      "bytes": 204,
+      "sha256": "2404b784d9d1cae2ec076d998a8715a78de3838f5da015b559f0b7d19f53f5ce",
+      "source_sha256": "2404b784d9d1cae2ec076d998a8715a78de3838f5da015b559f0b7d19f53f5ce",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/messaging/RabbitTaskConsumer.java",
+      "bytes": 4957,
+      "sha256": "2ee9894cd1ee82a0e74b411194db8ce27654290e8e241cadc4b869f0951649b7",
+      "source_sha256": "2ee9894cd1ee82a0e74b411194db8ce27654290e8e241cadc4b869f0951649b7",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/messaging/TaskMessages.java",
+      "bytes": 1287,
+      "sha256": "fa3d55118d0bb750ec790d0e80afcc519a37710bc68006a273f585a64367cc80",
+      "source_sha256": "fa3d55118d0bb750ec790d0e80afcc519a37710bc68006a273f585a64367cc80",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/messaging/TaskQueueNames.java",
+      "bytes": 1045,
+      "sha256": "c8ffdf0bf9bc092451724c73a1191e7a66d4e60685e3e08c0bc577629d2959e0",
+      "source_sha256": "c8ffdf0bf9bc092451724c73a1191e7a66d4e60685e3e08c0bc577629d2959e0",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/model/MockModelClient.java",
+      "bytes": 322,
+      "sha256": "c1f5cbe4cf4315faaf5a7a3309bf73e4b419999445221d7c0fa421ac0be2fcff",
+      "source_sha256": "c1f5cbe4cf4315faaf5a7a3309bf73e4b419999445221d7c0fa421ac0be2fcff",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/model/ModelCallException.java",
+      "bytes": 672,
+      "sha256": "2ba8bb870fb5031056293f9a9ed5f27e84ae2878ed9155588e1b3b4bc622d9ae",
+      "source_sha256": "2ba8bb870fb5031056293f9a9ed5f27e84ae2878ed9155588e1b3b4bc622d9ae",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/model/ModelClient.java",
+      "bytes": 102,
+      "sha256": "bb8c86d63e44463c620a0a6cae76fe1555039c11c2d4d1facf80e463b8823d1d",
+      "source_sha256": "bb8c86d63e44463c620a0a6cae76fe1555039c11c2d4d1facf80e463b8823d1d",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/model/OpenAiCompatibleModelClient.java",
+      "bytes": 6108,
+      "sha256": "ef6852c1cec2b3daea6752e0f8bcfd137c77e41892707e2b866fa389a59a1a8a",
+      "source_sha256": "ef6852c1cec2b3daea6752e0f8bcfd137c77e41892707e2b866fa389a59a1a8a",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/model/OpenAiModelSettings.java",
+      "bytes": 2175,
+      "sha256": "d0457d72039b44de5ea58999cf0ae3f7c230b5205a8e6214040da317a67002cf",
+      "source_sha256": "d0457d72039b44de5ea58999cf0ae3f7c230b5205a8e6214040da317a67002cf",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/outbox/JdbcOutboxRepository.java",
+      "bytes": 7366,
+      "sha256": "d14c54ee05b8c9f39a7bd33f6d23045f613dcb4ff8e32ff76f2b2e502a00dd0f",
+      "source_sha256": "d14c54ee05b8c9f39a7bd33f6d23045f613dcb4ff8e32ff76f2b2e502a00dd0f",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/outbox/OutboxDispatcher.java",
+      "bytes": 3822,
+      "sha256": "7326d03edbfdaceb1eee8785c07c64d3d9f76494e93ba3a1fce85cc1b8a3270f",
+      "source_sha256": "7326d03edbfdaceb1eee8785c07c64d3d9f76494e93ba3a1fce85cc1b8a3270f",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/outbox/OutboxPoller.java",
+      "bytes": 480,
+      "sha256": "87fc9370a8131483f3652c966149819199986a8d95689a3a86f64a1a1a69270f",
+      "source_sha256": "87fc9370a8131483f3652c966149819199986a8d95689a3a86f64a1a1a69270f",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/outbox/OutboxRepository.java",
+      "bytes": 639,
+      "sha256": "91a2244dba47bf3ffac880c82950fa34e74a27547edfa9d4dac3432d113368f4",
+      "source_sha256": "91a2244dba47bf3ffac880c82950fa34e74a27547edfa9d4dac3432d113368f4",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/outbox/OutboxSettings.java",
+      "bytes": 804,
+      "sha256": "6562556e221d99f9cfa74e8e72debeb876ca3b1b8cad3b857eee8c9b52a5d5aa",
+      "source_sha256": "6562556e221d99f9cfa74e8e72debeb876ca3b1b8cad3b857eee8c9b52a5d5aa",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/outbox/OutboxSubmissionDispatcher.java",
+      "bytes": 552,
+      "sha256": "678dd5a3c17950df47be9c4cb6fca363d39c571c635b82b4489d59eeedad45e3",
+      "source_sha256": "678dd5a3c17950df47be9c4cb6fca363d39c571c635b82b4489d59eeedad45e3",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/ratelimit/RateLimitException.java",
+      "bytes": 745,
+      "sha256": "2a18c622ffa3fe74ce6cd4ea52656812fd307e75642a3beeee3c2eab91ded7cd",
+      "source_sha256": "2a18c622ffa3fe74ce6cd4ea52656812fd307e75642a3beeee3c2eab91ded7cd",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/ratelimit/RedisSubmissionRateLimiter.java",
+      "bytes": 2842,
+      "sha256": "4b660bcdc67b133c2eb7c4c8ee13f89767e24c2169b2632893259fd59eb26c54",
+      "source_sha256": "4b660bcdc67b133c2eb7c4c8ee13f89767e24c2169b2632893259fd59eb26c54",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/ratelimit/SubmissionRateLimitInterceptor.java",
+      "bytes": 1178,
+      "sha256": "61ebab90f98992870aab5bff264cfaec400838a192c5bc32fbc3e3213a0f44ce",
+      "source_sha256": "61ebab90f98992870aab5bff264cfaec400838a192c5bc32fbc3e3213a0f44ce",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/ratelimit/SubmissionRateLimiter.java",
+      "bytes": 191,
+      "sha256": "c1c2b02b2715a2e7be5099fe88c0e7027e57b0f85a219028f56188be0fe3a7cc",
+      "source_sha256": "c1c2b02b2715a2e7be5099fe88c0e7027e57b0f85a219028f56188be0fe3a7cc",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/repository/InMemoryTaskRepository.java",
+      "bytes": 7013,
+      "sha256": "b8905bb32c41b65d0acacdae7e799a7b4f15d396931605258701ca86accbc62b",
+      "source_sha256": "b8905bb32c41b65d0acacdae7e799a7b4f15d396931605258701ca86accbc62b",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/repository/JdbcTaskRepository.java",
+      "bytes": 15474,
+      "sha256": "f7e79584cf99a0502fee9390a395cefd1d4a1a417396d2b44bb677bb0be05aec",
+      "source_sha256": "f7e79584cf99a0502fee9390a395cefd1d4a1a417396d2b44bb677bb0be05aec",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/repository/TaskRepository.java",
+      "bytes": 2685,
+      "sha256": "dda80b37b0757218d960255c61e761d8fc8acaca72203021c47205afae871415",
+      "source_sha256": "dda80b37b0757218d960255c61e761d8fc8acaca72203021c47205afae871415",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/repository/TaskStateConflictException.java",
+      "bytes": 457,
+      "sha256": "53e0b46404fc3465cce9af2b7bf0ab7d59ae5df7297bfaaad88edb349120e025",
+      "source_sha256": "53e0b46404fc3465cce9af2b7bf0ab7d59ae5df7297bfaaad88edb349120e025",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/service/LocalTaskDispatcher.java",
+      "bytes": 822,
+      "sha256": "8e26568c6ddbae485ccd72446d6088f6e5d82effc6955439482d1ed851b15c76",
+      "source_sha256": "8e26568c6ddbae485ccd72446d6088f6e5d82effc6955439482d1ed851b15c76",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/service/TaskDispatchException.java",
+      "bytes": 469,
+      "sha256": "b1f796932e1e4eb5f243cd1cb45415f3a21a8525fe68412ca7e9456e24cde006",
+      "source_sha256": "b1f796932e1e4eb5f243cd1cb45415f3a21a8525fe68412ca7e9456e24cde006",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/service/TaskDispatcher.java",
+      "bytes": 294,
+      "sha256": "66b2a7ccad3fe86e60f1735bb62400dac68d4f7a0da25e6563698f4dff5b7368",
+      "source_sha256": "66b2a7ccad3fe86e60f1735bb62400dac68d4f7a0da25e6563698f4dff5b7368",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/service/TaskException.java",
+      "bytes": 366,
+      "sha256": "56a87abf2330affb3499f7ce48382e1b0aff512ff77de6a5bdeb917f6e1fbb53",
+      "source_sha256": "56a87abf2330affb3499f7ce48382e1b0aff512ff77de6a5bdeb917f6e1fbb53",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/service/TaskInputRules.java",
+      "bytes": 2315,
+      "sha256": "8ed9a4a049e00878c846adc34cb5d16a641280869a7dbc04a5d86dfd92fdc844",
+      "source_sha256": "8ed9a4a049e00878c846adc34cb5d16a641280869a7dbc04a5d86dfd92fdc844",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/service/TaskService.java",
+      "bytes": 2372,
+      "sha256": "3e71cda1a0efb0839da3a95e04d019bdc6bca6224a9bf1b50f0194b6b44d4f11",
+      "source_sha256": "3e71cda1a0efb0839da3a95e04d019bdc6bca6224a9bf1b50f0194b6b44d4f11",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/service/TaskTimeoutChecker.java",
+      "bytes": 1702,
+      "sha256": "59fdd2533945ca1eeba3629e81dfdcb2c5a0a7d08d12ed8148e45b06fe9647ed",
+      "source_sha256": "59fdd2533945ca1eeba3629e81dfdcb2c5a0a7d08d12ed8148e45b06fe9647ed",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/java/com/example/aitask/service/TaskWorker.java",
+      "bytes": 4306,
+      "sha256": "0a9cf69d16b83ec63dac1d2fbec340b590858692d3a5f698eb6e5372c4a2d3c1",
+      "source_sha256": "0a9cf69d16b83ec63dac1d2fbec340b590858692d3a5f698eb6e5372c4a2d3c1",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/resources/application.yml",
+      "bytes": 2534,
+      "sha256": "bf3dba2b11fb09170484213b5e38d4045cd14809c30fa018c2ec9d9078407c47",
+      "source_sha256": "bf3dba2b11fb09170484213b5e38d4045cd14809c30fa018c2ec9d9078407c47",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/main/resources/redis/submission-window.lua",
+      "bytes": 512,
+      "sha256": "6f42a42ee8e0415d3464ccf68fd4c7985ed95ebbf8a57601c40d91d1c4c67d33",
+      "source_sha256": "6f42a42ee8e0415d3464ccf68fd4c7985ed95ebbf8a57601c40d91d1c4c67d33",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/ApplicationTest.java",
+      "bytes": 657,
+      "sha256": "5764f42e1af98788e13d88d572439e3cad555b4deaf41f123be4313db705b949",
+      "source_sha256": "5764f42e1af98788e13d88d572439e3cad555b4deaf41f123be4313db705b949",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/api/StorageErrorApiTest.java",
+      "bytes": 3273,
+      "sha256": "aff63b3e8236e28fa3d59f368ab538c8b54cb809d3676afc5c9470b808fd8287",
+      "source_sha256": "aff63b3e8236e28fa3d59f368ab538c8b54cb809d3676afc5c9470b808fd8287",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/api/TaskControllerTest.java",
+      "bytes": 4569,
+      "sha256": "c76eca7258477fc76e542f48351c7e26b98ef65c9f12547dee72773177045918",
+      "source_sha256": "c76eca7258477fc76e542f48351c7e26b98ef65c9f12547dee72773177045918",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/config/ExecutionConfigurationTest.java",
+      "bytes": 1474,
+      "sha256": "67efb41520ef0cbccb6b2d47d5d384e7f0832636bd3bc2d5b097ed1545808354",
+      "source_sha256": "67efb41520ef0cbccb6b2d47d5d384e7f0832636bd3bc2d5b097ed1545808354",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/config/MessagingConfigurationTest.java",
+      "bytes": 2190,
+      "sha256": "ec9edad65a87d675a1fae4928d941cc9bbbaf9ca75accde2badf2936516ece11",
+      "source_sha256": "ec9edad65a87d675a1fae4928d941cc9bbbaf9ca75accde2badf2936516ece11",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/config/ModelConfigurationTest.java",
+      "bytes": 2109,
+      "sha256": "3234604045cde5abad8553289a18d811b46d788c9d05ca8e00bb80a5f9c61c27",
+      "source_sha256": "3234604045cde5abad8553289a18d811b46d788c9d05ca8e00bb80a5f9c61c27",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/config/OutboxConfigurationTest.java",
+      "bytes": 4699,
+      "sha256": "4f733a398985cab2099be1ee99de79c5fe16aeeb6f7a9481422c99e5c7950157",
+      "source_sha256": "4f733a398985cab2099be1ee99de79c5fe16aeeb6f7a9481422c99e5c7950157",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/config/StorageConfigurationOfflineTest.java",
+      "bytes": 4118,
+      "sha256": "ba297e30f210dbaa4803cbb738b6a824124500282589edc3a9ff85acff9c6109",
+      "source_sha256": "ba297e30f210dbaa4803cbb738b6a824124500282589edc3a9ff85acff9c6109",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/config/TaskTimeoutConfigurationTest.java",
+      "bytes": 2853,
+      "sha256": "11f9a89942f8b2a4df20659ffc063fbc0f07879d3860483ece13311ff71d6deb",
+      "source_sha256": "11f9a89942f8b2a4df20659ffc063fbc0f07879d3860483ece13311ff71d6deb",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/domain/TaskStatusTest.java",
+      "bytes": 2172,
+      "sha256": "f050959a6a5f24281e36bc144e5bd202a036401c157e43babab5a682ea98e161",
+      "source_sha256": "f050959a6a5f24281e36bc144e5bd202a036401c157e43babab5a682ea98e161",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/messaging/RabbitMessagingTest.java",
+      "bytes": 12469,
+      "sha256": "7465854d2ed8682715c14aee5bba96e4d140b58b370add4dbd1736b190e904c8",
+      "source_sha256": "7465854d2ed8682715c14aee5bba96e4d140b58b370add4dbd1736b190e904c8",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/model/LocalModelHttpServer.java",
+      "bytes": 4341,
+      "sha256": "b67bcbebc51436a8cb6c0865c121b9c67bd64f2bf35f86ec5972d8ed0b20227e",
+      "source_sha256": "b67bcbebc51436a8cb6c0865c121b9c67bd64f2bf35f86ec5972d8ed0b20227e",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/model/OpenAiCompatibleModelClientTest.java",
+      "bytes": 5972,
+      "sha256": "42747476b3d4e49a3113241913c7e63ea3a504dbe420e9e43e66cf6f24bdf089",
+      "source_sha256": "42747476b3d4e49a3113241913c7e63ea3a504dbe420e9e43e66cf6f24bdf089",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/outbox/OutboxDispatcherTest.java",
+      "bytes": 7223,
+      "sha256": "feb19ddd34bbfcff988b021e8e3b45ceb9d9a6c7d00cce4aa7ea0944e873d0aa",
+      "source_sha256": "feb19ddd34bbfcff988b021e8e3b45ceb9d9a6c7d00cce4aa7ea0944e873d0aa",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/ratelimit/SubmissionRateLimitRedisIT.java",
+      "bytes": 11697,
+      "sha256": "12ae37c24657e5682c3c3c5c7d23f4d0260c9ec2257b125dfb08ae49fde3f61c",
+      "source_sha256": "12ae37c24657e5682c3c3c5c7d23f4d0260c9ec2257b125dfb08ae49fde3f61c",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/ratelimit/SubmissionRateLimitTest.java",
+      "bytes": 5902,
+      "sha256": "968ac8acb21043aa7be9122085e13d3f8ac121d211ba0fca9bf6409a86324684",
+      "source_sha256": "968ac8acb21043aa7be9122085e13d3f8ac121d211ba0fca9bf6409a86324684",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/repository/JdbcTaskRepositoryMySqlIT.java",
+      "bytes": 20899,
+      "sha256": "b8df8d72a13a495e5d07f49e6846569d3cf850f6b55b4272d78ab737ab6f5a51",
+      "source_sha256": "b8df8d72a13a495e5d07f49e6846569d3cf850f6b55b4272d78ab737ab6f5a51",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/repository/JdbcTaskRepositoryOfflineTest.java",
+      "bytes": 12719,
+      "sha256": "75f04495ef2208e7cc3836828b426fd360c9c74f7b485e192fd8c0cf82c14d2b",
+      "source_sha256": "75f04495ef2208e7cc3836828b426fd360c9c74f7b485e192fd8c0cf82c14d2b",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/repository/MySqlAcceptanceSupport.java",
+      "bytes": 4182,
+      "sha256": "4ccce9518edbe4fe1097f07f2acb10cd3daf5da29149525b2e58625143590b54",
+      "source_sha256": "4ccce9518edbe4fe1097f07f2acb10cd3daf5da29149525b2e58625143590b54",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/repository/MySqlAcceptanceSupportTest.java",
+      "bytes": 3946,
+      "sha256": "cfbd8bfbbc699d242c419f0654afc50048719db2f6b7e3943a62a9e307418358",
+      "source_sha256": "cfbd8bfbbc699d242c419f0654afc50048719db2f6b7e3943a62a9e307418358",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/repository/OfflineJdbcFixture.java",
+      "bytes": 9872,
+      "sha256": "88fa675bb3a4d2aab0fe15e48046c77c796729307151c249b224b3344b1ec31d",
+      "source_sha256": "88fa675bb3a4d2aab0fe15e48046c77c796729307151c249b224b3344b1ec31d",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/repository/TaskExecutionLeaseIT.java",
+      "bytes": 11492,
+      "sha256": "666886610552b42f61f4084a6bd7eb9a7e035315558b3903bbbd2a5955bc4db4",
+      "source_sha256": "666886610552b42f61f4084a6bd7eb9a7e035315558b3903bbbd2a5955bc4db4",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/repository/TaskOutboxTransactionTest.java",
+      "bytes": 2635,
+      "sha256": "dd9295e599a378c557f563bde961ede5ff5d9fd7b7defa7443b1e487db3e5add",
+      "source_sha256": "dd9295e599a378c557f563bde961ede5ff5d9fd7b7defa7443b1e487db3e5add",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/repository/TaskPipelineModelHttpIT.java",
+      "bytes": 13407,
+      "sha256": "4571513d627d901d0b1545ddd5b39292a4da4c959a677673c46c27a754be0324",
+      "source_sha256": "4571513d627d901d0b1545ddd5b39292a4da4c959a677673c46c27a754be0324",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/repository/TaskPipelineOutboxIT.java",
+      "bytes": 15707,
+      "sha256": "c7ebb666340e8be70623728710b2238c6a834c152b4dcf86832a7df23bb2ff28",
+      "source_sha256": "c7ebb666340e8be70623728710b2238c6a834c152b4dcf86832a7df23bb2ff28",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/repository/TaskPipelineRabbitIT.java",
+      "bytes": 19382,
+      "sha256": "aad7ebb55a36f88a0b2950491829afaac70d1048b379da3f3c86f07cf8b4f297",
+      "source_sha256": "aad7ebb55a36f88a0b2950491829afaac70d1048b379da3f3c86f07cf8b4f297",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/service/TaskExecutionTimeoutTest.java",
+      "bytes": 6248,
+      "sha256": "3169271677ae2686d9f1390e5b4f175b12b708badb15f084e8c8f4974dacb7a2",
+      "source_sha256": "3169271677ae2686d9f1390e5b4f175b12b708badb15f084e8c8f4974dacb7a2",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/service/TaskPersistenceSemanticsTest.java",
+      "bytes": 8563,
+      "sha256": "e473a79e6bdf0162376dbd1d95386774eff395747d876e4c519d82a36e3c2100",
+      "source_sha256": "e473a79e6bdf0162376dbd1d95386774eff395747d876e4c519d82a36e3c2100",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/java/com/example/aitask/service/TaskServiceTest.java",
+      "bytes": 6665,
+      "sha256": "34a825c852b96c684d97a2497383637a160e4cc940d3dc7603e6dbb75b31b9e3",
+      "source_sha256": "34a825c852b96c684d97a2497383637a160e4cc940d3dc7603e6dbb75b31b9e3",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/resources/application-test.yml",
+      "bytes": 70,
+      "sha256": "9f3e1687f433e377b915b779397b8c3caffa126ffcca98b699ff881d4624dfec",
+      "source_sha256": "9f3e1687f433e377b915b779397b8c3caffa126ffcca98b699ff881d4624dfec",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    },
+    {
+      "path": "src/test/resources/mysql-it-logback.xml",
+      "bytes": 157,
+      "sha256": "bb038c0159f2b97df63837127b3c732da68022e50de57c7ab43152a4a8c28e87",
+      "source_sha256": "bb038c0159f2b97df63837127b3c732da68022e50de57c7ab43152a4a8c28e87",
+      "source": "baseline-identical",
+      "license_scope": "PROJECT_APACHE_2_0_OR_REVIEW_METADATA_NOT_DEPENDENCY_RELICENSING"
+    }
+  ]
+}

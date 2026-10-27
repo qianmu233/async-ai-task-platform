@@ -1,0 +1,4 @@
+<configuration>
+    <!-- Acceptance evidence uses explicit credential-free stdout, no driver/pool debug output. -->
+    <root level="OFF"/>
+</configuration>

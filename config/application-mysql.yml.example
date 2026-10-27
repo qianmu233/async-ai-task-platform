@@ -1,0 +1,15 @@
+# Copy to config/application-mysql.yml ONLY AFTER manual schema initialization is approved.
+# Activate with --spring.profiles.active=mysql. This file must remain outside Git.
+# Database is fixed to ai_task_platform in StorageConfiguration; no URL override is accepted.
+platform:
+  storage:
+    mode: mysql
+    mysql:
+      host: ${AI_TASK_DB_HOST:127.0.0.1}
+      port: ${AI_TASK_DB_PORT:3306}
+      username: ${AI_TASK_DB_USERNAME}
+      password: ${AI_TASK_DB_PASSWORD}
+spring:
+  sql:
+    init:
+      mode: never

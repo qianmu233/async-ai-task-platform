@@ -1,0 +1,14 @@
+# Optional local profile template. Copy to ignored config/application-rabbit.yml only if needed.
+# No database schema initialization and no default broker credentials.
+platform:
+  storage:
+    mode: mysql
+  messaging:
+    mode: rabbit
+    queue-prefix: p1.ai-task
+    rabbitmq:
+      host: ${RABBITMQ_HOST:127.0.0.1}
+      port: ${RABBITMQ_PORT:5673}
+      username: ${RABBITMQ_USERNAME:}
+      password: ${RABBITMQ_PASSWORD:}
+      virtual-host: /ai-task-platform
