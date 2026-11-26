@@ -91,7 +91,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/smoke-test.ps1 -Base
 
 本步骤只访问已经存在的 `ai_task_platform.ai_text_task`，不初始化表，不迁移，不清理。测试需要 MySQL **8.0.16+ 的 8.0 系列**、InnoDB、strict SQL mode，固定业务用户 `ai_task_app`（SELECT/INSERT/UPDATE）。凭据仅由当前进程环境传入，不从 application-local/mysql 文件读取，不能通过 `-D...password`、URL、Maven settings 或命令行明文传入。
 
-一键脚本会采用现有 MYSQL_IT 环境，缺失时使用本机 127.0.0.1:3306 / ai_task_app，并仅提示一次安全密码输入。输入后在脚本进程环境中调用 Maven，结束时恢复环境；不用粘贴密码到聊天、命令参数或文件：
+一键脚本会采用现有 MYSQL_IT 环境，缺失时使用本机 127.0.0.1:3306 / ai_task_app，并仅提示一次安全密码输入。输入后在脚本进程环境中调用 Maven，结束时恢复环境；避免将凭据写入命令参数或文件。运行：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-mysql.ps1
@@ -101,7 +101,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-mysql.ps1
 
 自动化调用使用 `-NonInteractive`（必需 MYSQL_IT_PASSWORD，缺失返回 2，未连库）；可选 `-Offline` 只控制 Maven 依赖解析，真实测试仍连接真实 MySQL，不降级。已有环境优先于 `-MySqlHost/-MySqlPort` 默认值。脚本自动汇总实际 XML，只有 Maven 退出码 0、离线完整通过、22 项真实测试通过且两连接预检才返回成功；不启动/停止现有实例，不安装软件。每次用新的 run 目录，避免旧成功报告掩盖本次失败。
 
-不要在运行时开启 Maven `-X`、JDBC/pool/driver debug 或输出环境变量。IT 专用 Logback 配置关闭框架日志，只输出显式脱敏验收证据；错误只报告类别/数值 vendor code，不附原始异常 message/cause。密码不会转成系统属性或测试参数。日志和 XML 在被 Git 忽略的 target 目录，仍不要将凭据粘贴到聊天或提交 Git。
+不要在运行时开启 Maven `-X`、JDBC/pool/driver debug 或输出环境变量。IT 专用 Logback 配置关闭框架日志，只输出显式脱敏验收证据；错误只报告类别/数值 vendor code，不附原始异常 message/cause。密码不会转成系统属性或测试参数。日志和 XML 在被 Git 忽略的 target 目录，发布前应确认输出不包含凭据。
 
 ### 完整通过的判定（以下是期望，不是实际结果）
 

@@ -1,6 +1,6 @@
 # Phase 4B：最小 RUNNING 所有权与超时处理
 
-日期：2026-10-14，Asia/Shanghai。开发基线 43c9b49。用户人工完成 003 迁移后，**15:33:09 完整 verify：138 项离线＋1 项真实 MySQL 综合测试通过，Phase 4B 最小验收条件满足，可以安排 Phase 4C。** 按本轮明确授权建立本地提交，不 push；完成后停止，不开发下一阶段。
+2026-10-14，Asia/Shanghai，开发基线 43c9b49。完成 003 迁移后，15:33:09 的完整 verify 有 **138 项离线测试和 1 项真实 MySQL 综合测试通过**。
 
 ## 完成功能
 
@@ -16,7 +16,7 @@ MySQL 认领/完成先 SELECT FOR UPDATE 获得本地行锁，再启动新的 UT
 
 | 文件 | 用途 |
 | --- | --- |
-| database/003_worker_lease.sql | 用户人工增加两个可空字段、索引和执行所有权 CHECK；Codex 只读核对 |
+| database/003_worker_lease.sql | 新增两个可空字段、索引和执行所有权 CHECK，验收只读核对 |
 | repository/TaskRepository.java | 内部 Execution 句柄、受保护完成/过期接口，旧模式显式兼容 |
 | repository/JdbcTaskRepository.java、InMemoryTaskRepository.java | 所有权/期限验证、短事务行锁、条件超时失败、旧记录忽略 |
 | service/TaskWorker.java | 认领后携带句柄完成；晚到结果/失败不覆盖超时，无模型重试 |
@@ -24,7 +24,7 @@ MySQL 认领/完成先 SELECT FOR UPDATE 获得本地行锁，再启动新的 UT
 | config/StorageConfiguration.java、application.yml | 默认关闭及配置值，MySQL 模式显式装配 |
 | service/TaskExecutionTimeoutTest.java、config/TaskTimeoutConfigurationTest.java | 8 项关键离线测试 |
 | repository/TaskExecutionLeaseIT.java、pom.xml、scripts/verify-worker-lease.ps1 | 已通过的 1 项真实 MySQL 综合验收，独立 opt-in profile；写入前只读结构/权限门禁 |
-| README、docs/project-review.md、docs/worker-lease-migration-review.md、本报告 | 配置、审核、证据与源码/面试说明 |
+| README、docs/project-review.md、docs/worker-lease-migration-review.md、本报告 | 配置、迁移预检、证据与源码 |
 
 Java 生产前缀 src/main/java/com/example/aitask；测试前缀 src/test/java/com/example/aitask；配置 src/main/resources/application.yml。
 
@@ -50,7 +50,7 @@ PowerShell AST 0 错误；没有审批时 verify-worker-lease.ps1 -NonInteractiv
 
 ## 真实验证结果
 
-用户已确认人工执行 003。Codex 使用本地交互密码窗口，仅向本机测试子进程环境传入凭据和 WORKER_LEASE_IT_SCHEMA_APPROVED=true；窗口/测试进程已退出，密码未进入命令参数、源码、日志、报告或 Git。没有执行任何 DDL。
+在 003 迁移完成后，验收脚本通过子进程环境提供凭据与 `WORKER_LEASE_IT_SCHEMA_APPROVED=true`。数据库预检采用只读查询。
 
 实际入口 `scripts/verify-worker-lease.ps1 -NonInteractive -Offline`；Offline 仅禁止 Maven 下载依赖，真实数据库连接仍实际执行。完整 Maven verify 于 **2026-10-14 15:33:09 +08:00** 成功，exit=0：138 项离线、1 项真实 MySQL，分别 0 failures/errors/skipped。没有增加测试数量，也没有重跑此前 22 项 MySQL 或 MQ/Redis 综合验收。
 
@@ -86,6 +86,6 @@ modelRetries=0 表示该真实 Repository/Checker 测试没有调用模型；Tas
 - 过期完成在扫描前遇到 RUNNING 时，Worker 返回 IN_PROGRESS，沿用 Rabbit 的 RUNNING_UNRESOLVED 隔离；后续超时变 FAILED，不自动重放 parking。
 - 真正模型超时、取消、故障耐久性/跨 JVM、性能与 JDK 17 运行尚未验证（本机 JDK 25，release 17）。
 
-默认 memory/local 及既有单元契约通过，**人工迁移和最小真实 MySQL 验收已完成，满足本阶段 MVP 门槛，可以进入 Phase 4C**。只读预检和本轮新任务验证未涉及 DDL/旧任务更新、资源清理、其他项目修改、XXL-JOB/Redis 新功能或收费模型调用。完成后停止，等待用户安排真实 LLM 适配与收尾。
+默认 memory/local 及既有单元契约通过，**人工迁移和最小真实 MySQL 验收已完成，满足本阶段 MVP 门槛，可以进入 Phase 4C**。只读预检和本轮新任务验证未涉及 DDL/旧任务更新、资源清理、其他项目修改、XXL-JOB/Redis 新功能或收费模型调用。后续 HTTP 适配的验证结果见 [Phase 4C](phase4c-verification.md)。
 
 提交前检查：候选文件未包含 target、.env、本地密码配置、测试日志或密钥；凭据特征扫描未命中（静态启发式检查，不声称能精确证明任意秘密不存在）。git diff --check 通过；暂存范围限定 Phase 4B 的 18 个源码/脚本/迁移/文档文件，依据本轮明确授权建立本地提交，禁止 push。安全输入辅助脚本及测试报告均在忽略的 target 下。

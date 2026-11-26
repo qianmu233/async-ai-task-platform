@@ -18,7 +18,7 @@
 | `src/test/resources/mysql-it-logback.xml` | 新增 | IT 关闭框架/驱动日志，仅显式输出脱敏证据 |
 | `scripts/verify-mysql.ps1` | 新增 | 一键安全输入/环境凭据、完整 verify、独立目录与实际 XML/证据汇总 |
 | `AGENTS.md` | 新增 | 固化自主开发、最小关键测试、阶段推进、数据/凭据边界 |
-| `docs/project-review.md` | 新增 | 架构、技术选型、核心原理、源码导航、面试问题和可验证简历亮点 |
+| `docs/project-review.md` | 新增 | 架构、选型、源码及可核验结果 |
 
 本轮没有改生产 Repository、HTTP、模型或数据库初始化脚本。没有 Mock/H2/OfflineJdbcFixture 用于新增真实 IT；新增离线测试只验证配置/故障分类，不冒充数据库。
 
@@ -125,7 +125,7 @@ BUILD SUCCESS
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-mysql.ps1
 ```
 
-不要设置真实密码为 Maven 系统属性，不要开启 debug，不要将密码传给聊天。脚本自动保存退出码、`MYSQL_IT PREFLIGHT/STATE_CONFLICT/ROW/SUMMARY`、Failsafe XML/text；失败不会被当作通过。阶段最小测试原则已记录在 AGENTS.md，本轮未增加 Java 测试数量。
+不要设置真实密码为 Maven 系统属性，不要开启 debug，凭据使用进程环境传入。脚本自动保存退出码、`MYSQL_IT PREFLIGHT/STATE_CONFLICT/ROW/SUMMARY`、Failsafe XML/text；失败不会被当作通过。该批次沿用原 Java 测试。
 
 ## 待验证、未实现与提交条件
 
@@ -134,4 +134,4 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-mysql.ps1
 - 未实现：持久化队列/outbox、启动扫描、租约/心跳/attempt/fencing、自动重试/退避、运行超时和悬挂恢复、exactly-once、认证/租户/生产监控。无 RabbitMQ、Redis、收费模型或认领 HTTP 接口。
 - **满足 Phase 2B 核心验收提交条件，可以进入 Phase 3。** 真实 opt-in 退出码 0、22 项真实通过、两个不同服务端连接 ID、单胜出/单冲突及最终字段/version 证据均已取得；这不表示生产级恢复/故障验收完成。本轮不自动 commit/push。
 
-下一阶段：单独实施 RabbitMQ 异步派发、幂等消费与失败分类，先复用已有条件认领；关注 MySQL 与 MQ 双写窗口、发布确认及 ACK 时机，不同时引入 Redis/复杂恢复。集中学习资料持续维护于 docs/project-review.md。
+后续的消息双写、发布确认与 ACK 处理见 [RabbitMQ 设计](rabbitmq-design.md)。

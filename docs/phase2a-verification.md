@@ -141,4 +141,4 @@ IF NOT EXISTS 不能升级已有旧表；存在旧表时先人工比对结构，
 - 模型调用 exactly-once；新幂等键可创建另一任务，人工重置 RUNNING 可能造成重复执行。
 - 真实 MySQL 集成测试及跨实例验收；本轮不把离线替身视为这些能力已经通过。
 
-不接入 RabbitMQ、Redis、XXL-JOB 或真实收费模型。本轮代码及离线测试已完成，停止并等待用户审核，再开展真实数据库初始化与集成测试。
+该阶段覆盖离线 API 和持久化合约。真实数据库验证见 [Phase 2B](phase2b-verification.md)。

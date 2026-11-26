@@ -32,7 +32,7 @@
 | src/test/java/com/example/aitask/config/MessagingConfigurationTest.java | 3 项模式门禁及无连接装配用例 |
 | src/test/java/com/example/aitask/repository/TaskPipelineRabbitIT.java | 1 项 opt-in 真实 DB/MQ/HTTP 链路，扩展交叉派发与同任务双实例竞争，实际通过 |
 | scripts/verify-rabbit.ps1、infra/rabbitmq-compose.yml | 一键验收和独立 P1 容器方案 |
-| README.md、docs/project-review.md、docs/rabbitmq-design.md、本报告 | 运行、选型/原理/面试、证据与边界 |
+| README.md、docs/project-review.md、docs/rabbitmq-design.md、本报告 | 运行方式、原理和验证范围 |
 
 Java 生产相对路径均以 src/main/java/com/example/aitask 为前缀。原有全部测试文件保留，没有增加 MQ 测试框架或 Mockito/H2。
 

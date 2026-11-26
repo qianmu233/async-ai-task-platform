@@ -1,6 +1,6 @@
 # Asynchronous AI Task Orchestration Platform
 
-**异步 AI 任务调度与执行平台**
+**大模型异步任务处理平台**
 
 基于 **Java 17 + Spring Boot** 构建的异步 AI 任务处理平台。通过任务幂等受理、后台执行、MySQL 持久化、Transactional Outbox 与 RabbitMQ 消息派发，将耗时的模型请求拆分为**任务提交、后台处理和结果查询**三个环节；结合 Worker 条件领取、执行令牌与超时检查，保证任务状态按预期流转。
 
@@ -124,7 +124,7 @@ stateDiagram-v2
 
 ### 3. RabbitMQ 消费与 Worker 执行权管理
 
-`RabbitTaskConsumer` 负责接收消息、手动 ACK 与异常分类；`TaskWorker` 负责实际任务执行。
+`RabbitTaskConsumer` 负责接收消息、手动 ACK 与异常分类。`TaskWorker` 负责实际任务执行。
 
 Worker 收到任务后，先使用数据库条件更新将 `PENDING` 任务领取为 `RUNNING`。只有领取成功的 Worker 才调用模型。
 
@@ -188,7 +188,7 @@ Invoke-RestMethod "http://127.0.0.1:8081/api/tasks/$($task.taskId)"
 Invoke-RestMethod "http://127.0.0.1:8081/api/tasks/$($task.taskId)/result"
 ```
 
-## 本地运行
+## 快速启动
 
 ### 环境要求
 
@@ -254,8 +254,25 @@ powershell -NoProfile -File scripts/smoke-test.ps1
 
 - **自动化回归**：完成 147 项本地自动化测试。
 - **持久化消息链路**：独立 JAR 运行验收中，25 条 Outbox 事件完成派发，24 条 Mock 任务成功，1 条预设异常任务按预期失败。
-- **接口响应时间**：在 Mock 模型固定延迟为 1000 ms、并发数为 8、同步与异步接口各执行 240 次的测试中，P95 从同步接口的 **1019.125 ms** 降至异步受理接口的 **2.245 ms**，提交接口响应时间下降约 **99.78%**。
+### 接口延迟与任务完成时间
 
+2026-10-29 的本机对照使用 `memory/local`、2 个 Worker 和本地 Mock HTTP 模型。模拟延迟为 1000 ms、客户端并发为 8 时，同步与异步各测量 240 次请求。
+
+| 计时范围 | P95 |
+|---|---:|
+| 同步接口等待模型后返回 | 1019.125 ms |
+| 异步 POST 返回任务 ID | 2.245 ms |
+| 异步提交到观察到任务完成并取回结果 | 4059.827 ms |
+
+异步受理的响应时间约下降 99.78%。异步完成时间包含 Worker 排队、模型执行与客户端轮询。另有独立的 MySQL、RabbitMQ 和 Outbox 小样本验收，记录了默认 1 秒派发轮询下的受理与完成时间。[独立服务验收与计时口径](docs/phase5-verification.md#有限性能口径)
+
+## 技术文档
+
+- [启动与部署指南](docs/demo-guide.md)
+- [系统设计与源码导读](docs/project-review.md)
+- [MySQL 持久化设计](docs/persistence-design.md)与[数据库脚本](database/)
+- [RabbitMQ 派发设计](docs/rabbitmq-design.md)、[Outbox 迁移](docs/outbox-migration-review.md)与[Worker 执行权迁移](docs/worker-lease-migration-review.md)
+- [Redis 限流验证](docs/phase3b-verification.md)、[模型 HTTP 适配验收](docs/phase4c-verification.md)与[故障及性能验收](docs/phase5-verification.md)
 
 ## 许可证
 
