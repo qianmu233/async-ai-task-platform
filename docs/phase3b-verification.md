@@ -30,7 +30,7 @@ POST `/api/tasks` → 可选拦截器 → Redis Lua 原子受理计数/TTL → �
 | src/test/java/com/example/aitask/ratelimit/SubmissionRateLimitTest.java | 6 项关键离线用例 |
 | src/test/java/com/example/aitask/ratelimit/SubmissionRateLimitRedisIT.java | 1 项真实 Redis / HTTP / 独立 JVM 综合验收 |
 | infra/redis-compose.yml、scripts/verify-redis.ps1 | 专用 Docker 资源、凭据环境、完整 verify 与真实验收汇总 |
-| README.md、docs/project-review.md、本报告 | 配置、证据、原理与面试问题 |
+| README.md、docs/project-review.md、本报告 | 配置、原理及验证结果 |
 
 Java 生产相对路径前缀 src/main/java/com/example/aitask；YAML 为 src/main/resources/application.yml。原有 Phase 3A 未提交文件另见该阶段报告。
 
@@ -92,7 +92,7 @@ P1 RabbitMQ ai-task-platform-rabbitmq 保持 healthy；P2 mysql-erp/rag-demo/pgv
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-redis.ps1 -UseP1Container
 ```
 
-仅首次经授权启动使用 `-StartRedis`，已有任何同名 P1 容器/卷/网络会拒绝重建。外部凭据模式先在本地安全配置 REDIS_HOST=127.0.0.1、REDIS_PORT=6380、REDIS_PASSWORD，再运行脚本 -NonInteractive 或 `mvn -B -ntp -Predis-it verify`；不要将密码放进命令参数、.env、Git 或聊天。
+初次建立专用 Redis 时使用 `-StartRedis`。脚本遇到同名容器、卷或网络会停止。外部凭据模式先在本地安全配置 REDIS_HOST=127.0.0.1、REDIS_PORT=6380、REDIS_PASSWORD，再运行脚本 -NonInteractive 或 `mvn -B -ntp -Predis-it verify`；Redis 密码由进程环境传入。
 
 已解决：跨实例共享额度、计数与 TTL 原子性、客户端自报身份绕过、明确 429/503、安全默认关闭、一键真实验收和子进程回收。
 

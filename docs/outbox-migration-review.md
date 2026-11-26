@@ -1,6 +1,6 @@
 # 002 Outbox 迁移：人工审核与管理员执行
 
-状态：**2026-10-14 用户已人工执行并核对新增表；Codex 只读确认 MySQL 8.0.45、InnoDB、四个有效 CHECK、FK/唯一键及最小业务权限。11:41:41 真实联合验收通过。** 本机无需再次执行 SQL。本文保留新环境的审核/初始化说明，Codex 未执行 DDL 或清理。
+2026-10-14 的独立环境通过 MySQL 8.0.45 结构核验及联合验收。检查了 InnoDB、四个 CHECK、外键、唯一键和业务权限。以下步骤适用于新环境。
 
 ## 变更边界
 
@@ -18,15 +18,15 @@ SQL 未使用 IF NOT EXISTS：重复执行应明确失败，不能掩盖既有�
 | created_at / updated_at / DATETIME(6) | UTC 数据库时钟；生命周期 CHECK 限制字段一致性 |
 | 两个状态/到期索引 | 支持待派发与过期认领扫描；尚无性能指标或 EXPLAIN 验收 |
 
-## 新环境首次人工初始化（本机已完成）
+## 新环境初始化
 
-**仅新环境首次部署：审核并用本机数据库管理员执行 database/002_outbox.sql。** 不要用 ai_task_app 执行 DDL，不要把管理员密码粘贴到聊天或命令参数。可使用已登录的 MySQL Workbench/客户端运行文件；Codex 不代为执行 CREATE/ALTER。已存在兼容表时不要重复执行或清理它。
+初次部署时由数据库管理员审核并执行 [002_outbox.sql](../database/002_outbox.sql)。业务账号只需数据读写权限。已有兼容表时先核对结构。
 
 执行前由管理员确认 `SELECT DATABASE()`/目标连接为该 P1 业务库、既有 ai_text_task 为 InnoDB/MySQL 8.0.16+，并检查有没有同名 Outbox 表。脚本中的 USE 会显式切换业务库，不创建库。
 
 执行后管理员对比 `SHOW CREATE TABLE ai_task_platform.ai_task_outbox`；检查 ai_task_app@127.0.0.1 原权限。已有库级 SELECT/INSERT/UPDATE 授权自动覆盖新表；若原来仅表级授权，管理员需审核后补新表相同三项权限，不授予业务用户 DDL/DELETE。迁移脚本不执行 GRANT。无需重新初始化旧任务表，不清理任何数据。
 
-## 审批后的自动验收入口
+## 集成验收入口
 
 迁移完成并明确授权后，再在测试进程设置 `OUTBOX_IT_SCHEMA_APPROVED=true`。这只是审批门禁，不创建表；真实 preflight 仍读表结构、MySQL 产品/版本、业务账号及独立连接，不存在任何内存降级。默认构建不使用该开关。
 

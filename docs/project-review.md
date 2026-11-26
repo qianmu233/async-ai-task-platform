@@ -1,6 +1,6 @@
-# 项目集中学习与面试复盘
+# 系统设计与源码导读
 
-更新日期：2026-10-14。Phase5开发基线 **adfc5da**；真正使用Microsoft JDK17.0.16构建/运行，**147本地测试＋独立生产Scheduled/MySQL/Rabbit/Mock业务闭环＋既有1项真实所有权回归通过**。24正常/1业务失败、25SENT，历史元数据未变。Phase4C本地模型HTTP证据保留，第三方调用0次。按本轮授权本地提交、不push，核心MVP收尾后停止，进入简历审核/集中复盘。长期规则见 AGENTS.md。
+本文说明任务注册、数据库状态仲裁、Outbox 派发、Worker 执行权、提交限流及模型适配。各阶段的配置与验收结果保留原有统计口径。[项目主页](../README.md) · [启动与部署](demo-guide.md)
 
 ## 1. 当前架构与业务链路
 
@@ -58,11 +58,11 @@ RabbitMQ 核心链路及最小双实例消费已真实验收；MQ 崩溃/磁盘�
 
 规范化采用 NFC 与 CRLF/CR → LF，保留大小写和空格；normalization_version=NFC_LF_V1。ASCII 幂等键大小写敏感。不要用数据库输入列的忽略大小写/重音排序规则决定输入是否等价。
 
-### 状态条件更新
+### 状态条件更新（基础模式）
 
 认领 SQL 的条件为 `task_id=? AND status='PENDING'`；完成条件为 RUNNING。一次更新恰好影响一行才成功，零行抛明确状态冲突。两个真实连接竞争时，InnoDB 串行仲裁同一行的更新条件，失败方不能覆盖胜出状态。
 
-`version` 每次状态变更递增：PENDING=0、RUNNING=1、正常终态=2。它目前是变更计数，**没有参与 WHERE 条件，也不是 Worker 所有权或 fencing token**。不能把它描述为完整乐观锁/租约方案。
+任务 `version` 随状态变更递增，通常依次为 PENDING=0、RUNNING=1、终态=2。基础认领使用状态条件。启用执行期限时，完成写回额外核对执行令牌与数据库截止时间。Outbox 的版本号单独用于派发事件的条件更新。
 
 ### 事务边界与失败
 
@@ -70,11 +70,11 @@ Repository 为 REQUIRES_NEW / READ_COMMITTED 短事务；认领提交后才调�
 
 排队拒绝只尝试 PENDING → FAILED，不能覆盖已经认领的 RUNNING。认领竞争失败的执行者退出，不调用模型。
 
-## 4. 核心源码与推荐阅读顺序
+## 4. 核心源码导航
 
 路径均相对仓库根目录，Java 包前缀为 `src/main/java/com/example/aitask/`。
 
-| 阅读顺序 | 源码 | 重点 |
+| 序号 | 源码 | 重点 |
 | --- | --- | --- |
 | 1 | api/TaskController.java | POST 创建/复用、GET 状态/结果、202/200/409/503 语义 |
 | 2 | service/TaskService.java、service/TaskWorker.java | submit 注册/派发；worker.execute 认领/模型/终态，区分存储阶段 |
@@ -91,47 +91,30 @@ Repository 为 REQUIRES_NEW / READ_COMMITTED 短事务；认领提交后才调�
 | 13 | messaging/RabbitTaskConsumer.java、config/MessagingConfiguration.java | ACK、有限退避、隔离、暂停和条件装配 |
 | 14 | src/test/java/com/example/aitask/repository/TaskPipelineRabbitIT.java、scripts/verify-rabbit.ps1 | 真实 HTTP/DB/MQ、两个独立应用上下文的交叉派发/竞争，原始 XML/日志归档 |
 
-## 5. 面试高频问题与回答要点
+## 5. 并发与故障语义
 
-1. **为什么不直接给方法加 synchronized？** 它只能保护一个 JVM。业务可有多个实例，唯一键和条件 UPDATE 的仲裁应在共享数据库中完成。
-2. **幂等键相同但请求内容不同怎么办？** 冲突，不能复用。先按版本规则规范化，然后精确比较输入，HTTP 409。
-3. **两个 Worker 会不会都执行模型？** 当前 PENDING 的条件认领只允许一个成功，失败方退出。真实双连接测试验证这一状态仲裁；不能据此宣称所有崩溃/恢复路径都 exactly-once。
-4. **为什么版本加一不等于完整乐观锁？** WHERE 没有检查版本，当前靠状态仲裁；将来重新执行同一任务需 attempt/所有权等独立设计，避免旧 Worker 写新执行结果。
-5. **事务为什么不包住模型请求？** 外部调用可能很慢，会延长锁与连接占用。分为认领、模型、完成三个阶段，以数据库状态暴露故障窗口。
-6. **模型成功但数据库连接断了怎么办？** 提交结果可能未知，日志不能代表数据库最终状态；查询后再判断，不能自动改成模型失败或盲目重跑。
-7. **线程池满了、应用重启了怎么办？** 满时新任务标记 EXECUTION_REJECTED；内存队列在重启后丢失，可能留下 PENDING/RUNNING。目前没有恢复，Phase 3/4 分别解决可靠派发和补偿。
-8. **RabbitMQ 如何保证不丢任务？** 直接双写有窗口；显式 Outbox 为新任务同事务记录意图，再确认发布与到期重派。Phase 4A 已真实验证事务回滚、CAS 单胜、confirm 后未标记的重复投递和模型幂等；有限重试耗尽要隔离处理。不存在端到端 exactly-once，Broker 崩溃耐久性未验证。
-9. **重复消息怎么处理？** 复用数据库条件认领；终态重复 ACK，RUNNING 无所有权信息时隔离；模型业务异常写 FAILED，认领存储失败有限退避，完成存储失败不重跑模型，不能无限 requeue。
-10. **Redis 解决了什么问题？** 多实例共享提交额度，使用单个 Lua 原子计数与 TTL；MySQL 继续负责注册幂等/状态一致性。Redis 不可用明确返回 503，不用本地计数冒充分布式限流，不用 Redis 锁代替数据库约束。
-11. **你怎么证明并发正确？** 提供两个不同 MySQL CONNECTION_ID、同步竞争、单胜出/单冲突、最终行字段/版本、原始 XML 和 Maven 退出码，离线替身不作为真实证据。
-12. **项目最大的局限？** 固定 RUNNING 所有权/超时已有代码及离线证据，真实验证等 003；没有续期/重跑、外部单调 fencing、完整恢复/重放、认证/租户、真实模型和生产级故障/性能证据。不虚构能力。
+- 多实例共享 MySQL，唯一键和条件更新决定提交与任务认领的胜者。相同键的不同规范化输入返回 HTTP 409。
+- 任务认领先提交短事务，模型调用在事务之外执行。模型已返回但完成事务结果未知时，应查询持久化状态。消费者不会为这一类存储错误自动重跑模型。
+- RabbitMQ 投递允许重试。终态重复消息确认处理，认领存储失败采用有界退避，缺少有效执行权的重复消息按消费规则隔离。Outbox 与任务终态分别维护。
+- Redis Lua 控制共享提交额度，启动限流后 Redis 故障使提交返回 HTTP 503。注册幂等与状态一致性仍由数据库负责。
+- 内存执行队列随进程退出丢失。持久化模式可恢复待派发事件，已过期的执行权进入超时失败分支，超期模型结果无法写回。
 
-## 6. 已验证证据与简历表达
+## 6. MySQL 幂等与并发验证
 
 2026-10-13 11:18:21 +08:00，自动执行一键验收：Maven verify 退出码 0；99 项离线（保留原 87 项）和 22 项真实 MySQL 测试全部通过。MySQL 8.0.45，两个服务端连接 ID 为 25/26。认领成功/冲突 5/5，终态完成成功/冲突 5/5，同键不同输入插入成功/冲突 5/5，同键等价输入创建/复用 5/5。终态竞争实际产生 3 次 SUCCESS、2 次 FAILED；两种终态禁止覆盖均验证。
 
 留存 22 行本轮测试数据：10 PENDING/version=0、5 RUNNING/version=1、4 SUCCESS/version=2、3 FAILED/version=2。数据库状态由测试的两连接回读得到，不由日志字符串猜测代替断言；没有删除数据。完整报告及样例 UUID/时间见 docs/phase2b-verification.md，原始证据在 target/phase2b-runs/，默认不进 Git。
 
-现阶段可使用的简历表述：
+## 7. 阶段验证记录
 
-> 基于 Spring Boot 与 MySQL 构建异步文本任务服务，使用唯一幂等键与状态条件更新实现跨实例任务注册、原子认领和终态保护；以独立真实 JDBC 连接并发验收单次认领及结果一致性，支持持久化查询和明确的业务/存储错误处理。
+- [MySQL 双连接竞争](phase2b-verification.md)
+- [RabbitMQ 双实例](phase3a-verification.md)及[跨进程 Redis 限流](phase3b-verification.md)
+- [Outbox 事务与重派](phase4a-verification.md)及[Worker 执行令牌与数据库截止时间](phase4b-verification.md)
+- [模型 HTTP 联合链路](phase4c-verification.md)与[独立服务故障、超时及延迟](phase5-verification.md)
 
-这是后端工程亮点，不代表调用过真实第三方模型。Rabbit/Redis/Outbox/Worker与HTTP适配可使用各节已验证表述；Phase5小样本延迟见第14节，不能推广为QPS/容量。XXL-JOB未实现，不写入简历能力。
+## 8. RabbitMQ 派发与消费实现
 
-## 7. 阶段推进与学习安排
-
-- Phase 2B：核心真实并发验收已通过，可进入 Phase 3；不额外建设大规模测试平台。
-- Phase 3A/3B：真实验收证据保留，2026-10-14 合并为本地 f4ba045；安全审核 37 个提交文件，未 push。
-- Phase 4A：人工迁移后130本地＋1真实联合测试通过，提交43c9b49，不push。
-- Phase 4B：固定执行期限/所有权与保守FAILED，人工003和138本地＋1真实MySQL通过，提交ff3eb42；不重跑，不把随机token描述为外部fencing。
-- Phase 4C：已完成最小OpenAI-compatible HTTP适配，146本地＋1真实基础设施/模拟模型HTTP链路通过；实际未接入XXL-JOB或收费模型。
-- Phase 5：147本地、独立JDK17生产定时链路及真实expiry回归通过；有限性能/故障证据、部署/演示/简历/复盘资料已整理。授权本地提交后停止开发，进入投递和学习。
-
-最终集中复盘按“API/限流 → 编排 → 状态机 → JDBC/事务 → MQ → 恢复 → 测试证据”顺序；每个阶段结束补充本文件，用户无需逐功能手动验收。
-
-## 8. Phase 3A 核心方法与 Java 后端面试映射
-
-| 核心类 / 方法 | 当前实现原理 | 对应面试问题 |
+| 核心类 / 方法 | 当前实现原理 | 设计问题 |
 | --- | --- | --- |
 | TaskService.submit | MySQL 注册事务完成后由 dispatcher 决定派发，保持 API/唯一键契约 | 同步受理和异步执行如何分层？为什么创建任务不包住模型事务？ |
 | TaskDispatcher.shouldDispatch、ConfirmedRabbitPublisher.shouldDispatch | local 仅首次，rabbit 允许同键 PENDING 再发；终态不派发 | 请求幂等与消息重复有什么区别？为什么允许重复发送却不允许重复认领？ |
@@ -148,26 +131,24 @@ Repository 为 REQUIRES_NEW / READ_COMMITTED 短事务；认领提交后才调�
 
 初版证据：2026-10-13 11:52:47 +08:00，113 离线＋22 真实 MySQL 回归通过。恢复环境后 **13:15:06** 的完整 verify 为 **113 离线＋1 真实 MQ 综合链路**通过，**13:17:36** 的 **22 真实 MySQL 定向回归**也通过。FakeTemplate/ACK recorder 仍只算离线证据；真实 TaskPipelineRabbitIT 使用实际 HTTP、JDBC、broker 和生产 listener，没有拿这些替身代替 MQ。报告见 docs/phase3a-verification.md。
 
-简历现阶段可以说明“基于 RabbitMQ 实现异步任务派发与消费，使用发布确认、mandatory 返回检查、手动 ACK 和数据库条件认领处理重复消息及失败隔离，并以真实 HTTP/MySQL/RabbitMQ 验证核心链路和两个独立应用实例竞争”。补充说明实例在同一 JVM；不能写 MQ 重启无丢失、完整恢复、端到端 exactly-once 或虚构吞吐。
+该阶段真实 HTTP/MySQL/RabbitMQ 验证在同一 JVM 的两个独立应用上下文中完成。跨 JVM 重启、Broker 崩溃耐久性和生产吞吐尚未纳入测试。
 
-## 9. 真实双实例验收的讲解要点
+## 9. 双实例验收的隔离方式
 
 - `TaskPipelineRabbitIT.startInstance` 创建 A/B 独立 Spring Boot 上下文，HTTP 60909/56926、独立 DataSource/Rabbit factory/registry；真实 MySQL session=32/34。它不是启动两个线程冒充实例，但也不是两个独立 JVM。
 - `observe` 包装真实 ChannelAwareMessageListener，仅记录投递，不替换 broker/Repository/生产执行；A/B 完成消费 12/5，模型调用 4/1，总计 17/5。
-- 交叉场景暂时停止测试实例 A 的消费，让 A HTTP 请求由 B 处理，再反向验证，明确派发不依赖本地线程池。仅停止本次测试 listener，不动 P2 或 Docker broker。
+- 交叉场景暂时停止测试实例 A 的消费，让 A HTTP 请求由 B 处理，再反向验证，明确派发不依赖本地线程池。暂停范围仅限测试实例的消费者。
 - `CountingModelConfiguration.countedMockModel` 仍委托实际 MockModelClient.process；CountDownLatch 只把竞争任务停留在 RUNNING（数据库认领已提交），方便确定性验证 8 条同 UUID 消息 A/B 各收到 4 条、仅一次模型执行、7 次状态冲突隔离。生产 ModelClient 没有加这个测试门禁。
 - 竞争中直接查 version=1，释放门禁后查 SUCCESS/version=2；全部 5 行任务在两 Repository 中读到相同快照，4 SUCCESS/1 FAILED。TextTask 不含 version 字段，所以验证用直接 SELECT，不改变 REST API。
 - 测试关闭两个应用后，真实 broker 工作队列 ready=0/unacked=0；隔离队列 durable=true/ready=9/unacked=0，证明原投递已确认且隔离副本保留。没有清理消息、数据或卷。
 
-面试可以被追问：**“为什么共享 JVM 的验证仍有价值，有哪些不能证明？”** 因为 MySQL 连接/事务、Rabbit 连接/消费者和 HTTP server 都独立且真实，仲裁由数据库完成，没有业务 JVM 锁；能够证明核心消费实例间交互。它不能代替进程崩溃、不同主机网络或跨 JVM 重启部署测试，这些留给故障/部署阶段。
+两个应用上下文各有独立 MySQL 会话、RabbitMQ 消费者和 HTTP 服务，共享数据库完成条件仲裁。测试覆盖核心实例间交互。进程退出和不同主机网络需另行验证。
 
-当前可复核资源：ai-task-platform-rabbitmq（RabbitMQ 4.3.6）、p1-ai-task_default 网络、/ai-task-platform vhost、独立卷；P2 三容器和两卷保留。消息/任务和隔离数据都用随机 run UUID，证据归档到 target，密码不写入学习资料或 Git。
-
-## 10. Phase 3B：Redis 限流原理、源码与面试
+## 10. Redis 提交限流
 
 选择 Redis 的业务原因是多实例共同限制任务提交量。JVM 本地计数在扩容后会按实例倍增额度；单个 Redis Lua 对来源键执行 GET/SET PX/INCR/PTTL，脚本期间没有其他请求插入计数与到期设置之间。默认关闭，启用后在 TaskService 前拒绝超限或存储异常，MySQL 注册幂等与 Rabbit 消费不改动。不是 Redis 分布式锁，也不增加任务缓存。
 
-| 核心源码 / 方法 | 实现原理 | 面试问题 |
+| 核心源码 / 方法 | 实现原理 | 设计问题 |
 | --- | --- | --- |
 | config/SubmissionRateLimitConfiguration.submissionRedisConnectionFactory | 显式开关、外部密码、Lettuce 连接/命令超时、要求 NONE 转发策略 | 默认构建如何不依赖 Redis？为何连接/命令超时都要配置？ |
 | ratelimit/SubmissionRateLimitInterceptor.preHandle | 仅任务提交 HandlerMethod，先查额度后注册；只取 getRemoteAddr | 过滤器/拦截器的区别？如何保证 429 前不创建任务？ |
@@ -181,15 +162,11 @@ Lua 保证执行时的隔离，运行中某条命令报错并不自动回滚之�
 
 来源是 TCP peer，不是登录用户。伪造 X-Forwarded-For/Forwarded/X-Client-Id 不能换额度；反向代理/NAT 后多用户共享 IP，会误伤。当前禁止自动转发头解释，未来若要按真实用户限流，需要认证，以及可信代理的网络隔离/头重写/明确允许名单，不能直接读取客户端自报头。IP 摘要避免 Redis 键明文保存地址，不代表匿名化（IP 可枚举）。
 
-真实证据：2026-10-14 10:32:15 +08:00，119 离线＋1 真实综合测试通过；Redis 7.4.11，独立 PID=48080/48368，HTTP=62428/62429，12 次提交中 4 受理/8 限流，counter=4、TTL=59654ms。不同伪造头不绕过，GET 正常，短 TTL 自然复位；第三 PID=48904 连接未监听端口返回 503。只停止本次进程，Redis/P1 Rabbit/P2 数据卷保留。报告与本地原始路径见 docs/phase3b-verification.md。
+真实证据：2026-10-14 10:32:15 +08:00，119 离线＋1 真实综合测试通过；Redis 7.4.11，独立 PID=48080/48368，HTTP=62428/62429，12 次提交中 4 受理/8 限流，counter=4、TTL=59654ms。不同伪造头不绕过，GET 正常，短 TTL 自然复位；第三 PID=48904 连接未监听端口返回 503。测试结束后停止三个验收进程，消息及数据库资源保留。报告与本地原始路径见 docs/phase3b-verification.md。
 
-可用于简历的已验证表述：
+限流验证覆盖固定窗口、共享额度、TTL 和 Redis 故障。用户级额度、滑动窗口和 Redis HA 不在该次验收范围内。
 
-> 基于 Redis Lua 实现可配置的任务提交分布式限流，原子维护计数与 TTL，统一返回 429/Retry-After，并在存储故障时明确拒绝提交；使用两个独立 Spring Boot JVM 和真实 Redis 验证共享额度、来源头防伪及失败路径。
-
-不声称用户级限流、精确滑动窗口、Redis HA 或性能指标；未验证 Broker 故障/Redis 重启丢失/远程部署。MySQL→MQ 双写缺口、任务恢复、租约和 fencing 仍留给 Phase 4。Git 基线 a2dff33，Phase 3A/3B 改动尚未提交，按最新授权本轮不 commit/push。
-
-以上第 10 节保留 Phase 3B 当时的结论；现已提交 f4ba045。Phase 4A Outbox 新增实现与证据范围如下，不能把未验收代码计入真实能力。
+参考：[Spring Data Redis scripting](https://docs.spring.io/spring-data/redis/reference/redis/scripting.html)、[Redis Lua 原子性与限制](https://redis.io/docs/latest/develop/programmability/eval-intro/)、[Spring Boot 转发头配置](https://docs.spring.io/spring-boot/3.5/how-to/webserver.html#howto.webserver.use-behind-a-proxy-server)。
 
 ## 11. Phase 4A：Transactional Outbox
 
@@ -199,7 +176,7 @@ HTTP 返回 202 后，派发意图已经提交，Rabbit 不可用不影响本地
 
 confirm+mandatory 成功后，WHERE event/status/token/未到期条件标记 SENT；过期或旧令牌不能覆盖新认领。发布失败/超时/结果未知返回 RETRY，数据库时钟计算 next_attempt_at，指数退避封顶；认领过期可重派，最终尝试崩溃也会隔离，避免永远停在 DISPATCHING。8 次默认预算消耗的是派发认领次数，不是模型次数；耗尽 ISOLATED，任务可能仍 PENDING，不能当成功。
 
-| 源码 / 关键方法 | 原理 | Java 后端面试问题 |
+| 源码 / 关键方法 | 原理 | 设计问题 |
 | --- | --- | --- |
 | repository/JdbcTaskRepository.createOrGet | task+event 同一事务，任务/事件唯一键异常分类 | 为什么外层 @Transactional 包不住内部 REQUIRES_NEW？为何 AFTER_COMMIT 不能替代 Outbox？ |
 | outbox/JdbcOutboxRepository.claim | DB UTC 时间、版本 CAS、短事务、可选单任务范围 | CAS 与 SELECT FOR UPDATE 的取舍？两个实例为何只有一个有效认领？如何避免网络 I/O 长时间持锁？ |
@@ -224,15 +201,9 @@ confirm+mandatory 成功后，WHERE event/status/token/未到期条件标记 SEN
 
 回查最终行：race 任务 SUCCESS/v2，事件 SENT/attempt1/v2；replay 任务 SUCCESS/v2，事件 SENT/attempt2/v3；无路由任务 PENDING/v0，事件 ISOLATED/attempt2/v4/PUBLISH_UNCONFIRMED。重派任务 completed_at 在首次消费时已设置，而 SENT 延迟约 30 秒，能解释消息状态与业务状态分离。手动 ACK 后本轮两个 durable 队列 ready/unacked/consumer=0；保留 3 个任务/3 个事件，没有旧数据修改或清理。
 
-当前可用于简历的已验证表述：
-
-> 基于 MySQL Transactional Outbox 持久化任务派发意图，通过版本 CAS、认领令牌、Publisher Confirm 和有限退避实现至少一次派发；使用独立真实 JDBC 会话与 RabbitMQ 验证并发单胜、事务回滚、确认后重派及消费者幂等保护。
-
-可以深入讲解事务边界和故障窗口；不能写端到端 exactly-once、Broker 故障耐久性、跨 JVM Outbox 崩溃恢复或虚构性能。用户无需再执行数据库迁移；Phase 4A 本地提交后停止等待审核，后续 4B 再做 RUNNING 租约/fencing。
+该次测试验证了事务回滚、条件认领和确认后的到期重派。Broker 崩溃耐久性及跨进程 Outbox 故障恢复尚未实测。
 
 原理参考：[Spring JDBC 本地事务连接绑定](https://docs.spring.io/spring-framework/reference/data-access/jdbc/connections.html)、[Rabbit confirm 与 mandatory return](https://docs.spring.io/spring-amqp/reference/amqp/template.html)、[MySQL 并发读写与锁](https://dev.mysql.com/doc/refman/8.0/en/innodb-locking-reads.html)。当前选择版本 CAS，未实现 SKIP LOCKED 框架或新的分布式锁。
-
-参考：[Spring Data Redis scripting](https://docs.spring.io/spring-data/redis/reference/redis/scripting.html)、[Redis Lua 原子性与限制](https://redis.io/docs/latest/develop/programmability/eval-intro/)、[Spring Boot 转发头配置](https://docs.spring.io/spring-boot/3.5/how-to/webserver.html#howto.webserver.use-behind-a-proxy-server)。源码和实际验收是本项目实现证据，官方文档用于复盘原理。
 
 ## 12. Phase 4B：固定执行所有权与保守超时
 
@@ -240,7 +211,7 @@ confirm+mandatory 成功后，WHERE event/status/token/未到期条件标记 SEN
 
 TaskTimeoutChecker 沿用Spring @Scheduled，有限批次将过期RUNNING变为FAILED/TASK_TIMEOUT，设置completed_at、output=NULL、version+1。Phase5因真实死锁将扫描UPDATE改为无锁读候选、逐个按主键条件UPDATE；双处理者仍重新检查状态/期限、只有一次成功。必须有非NULL token，旧无法确定所有权的记录不处理。
 
-| 核心源码 / 方法 | 实现原理 | 面试问题 |
+| 核心源码 / 方法 | 实现原理 | 设计问题 |
 | --- | --- | --- |
 | TaskRepository.Execution / claimExecution / succeedExecution / failExecution | 内部句柄携带 token/deadline，关闭功能时显式走旧契约 | 为什么不把执行令牌放进 REST？为什么不能让普通 succeed(id) 绕过保护？ |
 | JdbcTaskRepository.claimExecution / lockTask | 短事务先 InnoDB 行锁，再新语句 DB 时间写入 token/deadline | MySQL NOW/UTC_TIMESTAMP 的语句时间与锁等待有什么关系？为何模型不能占用事务？ |
@@ -261,11 +232,7 @@ MySQL 当前时间函数按语句求值；因此新认领/完成先用 SELECT FO
 
 当前证据：2026-10-14 15:33:09 +08:00，完整 verify 的 138 项离线（130 保留＋8 新增）和 1 项真实 MySQL IT 均零失败/错误/跳过。业务 run=935d26b4-66ce-469b-9eeb-48e68b97fe15，MySQL 8.0.45 会话 25/26，写入前核对 003 字段/索引、所有权与生命周期 CHECK、仅 SELECT/INSERT/UPDATE 权限。有效所有者正常完成 1 次；自然超时扫描前也拒绝迟到完成；两处理者更新总数=1、另一方=0，最终 FAILED/TASK_TIMEOUT/v2，输出 NULL、完成时间非 NULL、所有权清空。错 token 和旧 Worker 成功/失败写回均拒绝。保留 3 个随机新任务/2 个 Outbox 事件，没有修改旧任务或执行 DDL；模拟旧 NULL/NULL RUNNING 被忽略。报告/原始证据路径见 docs/phase4b-verification.md。
 
-可用于简历的已验证表述：
-
-> 基于 MySQL 执行者令牌、数据库截止时间和条件更新实现 RUNNING 任务保守超时失败与旧 Worker 写回保护；使用两个独立真实 JDBC 会话验证超时处理单次成功、终态版本一致及过期执行者不能覆盖。
-
-Phase4B真实测试是同JVM的两个物理MySQL会话，不是两个JVM，也不是Rabbit/LLM联合故障测试。modelRetries=0表示未调用模型；晚到Mock结果/错误和不重跑由本地Worker测试证明。迁移前拒绝门禁证据保留；JDK17运行和有限性能后来在Phase5补证。心跳、真实LLM取消/费用、外部fencing与崩溃耐久性仍未验证，不宣传exactly-once。该阶段按授权本地提交，后续阶段记录见下方。
+该次测试使用同一 JVM 内两个独立 MySQL 会话。过期后的结果保护、旧令牌拒绝和超时扫描竞争均有实际数据库断言。Worker 对迟到 Mock 结果的处理由本地测试验证。
 
 原理参考：[MySQL 语句时间函数](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html)、[MySQL 单表 UPDATE](https://dev.mysql.com/doc/refman/8.0/en/update.html)、[Spring 任务调度](https://docs.spring.io/spring-framework/reference/integration/scheduling.html)。
 
@@ -273,7 +240,7 @@ Phase4B真实测试是同JVM的两个物理MySQL会话，不是两个JVM，也�
 
 ModelClient 接口不变，ModelConfiguration 显式选择 Mock 或 OpenAiCompatibleModelClient；默认 Mock 不连接外部服务。Java 17 自带 HttpClient 无需新增 SDK，单例复用连接。这里只支持 Chat Completions 的单个 user message、单个纯文本 assistant choice、非流式输出；没有路由/Agent/RAG/模型管理或新表。
 
-| 核心源码 / 方法 | 实现原理 | 面试问题 |
+| 核心源码 / 方法 | 实现原理 | 设计问题 |
 | --- | --- | --- |
 | model/OpenAiModelSettings、config/ModelConfiguration | 环境变量、脱敏 toString、模式/凭据/超时预算启动门禁 | 为什么默认 Mock、禁止失败后回退 Mock？为什么 HTTP 超时要小于 Worker 期限？ |
 | model/OpenAiCompatibleModelClient.process | HttpClient 单次 POST、禁止重定向、sendAsync + 有界 get | 连接超时和整个响应超时有什么区别？为什么返回响应头后 body 仍会卡住？ |
@@ -291,19 +258,15 @@ HTTP 请求期限包含等待响应头和完整 body；body 字节数受独立�
 
 联合验收关闭测试应用的定时处理器，手动调用真实、单 taskId 范围的 Dispatcher；生产调度实现不变，不能把这次结果描述为新的定时扫描/跨 JVM/Broker 崩溃验收。旧 Rabbit 计数 Mock 测试配置曾污染其他 ContextRunner，已用专用 profile 隔离，本次明确断言实际模型 Bean 为 HTTP 适配器。
 
-可用于简历的已验证表述：
+联合验收使用本地模拟 HTTP 模型。第三方供应商协议差异、远端网络故障、模型质量与计费属于独立验证范围。
 
-> 基于 Java HttpClient 实现可配置的 OpenAI-compatible 模型适配，限制响应体与调用期限，区分上游/限流/格式错误；通过真实 HTTP、MySQL Outbox 和 RabbitMQ 联合测试验证任务结果持久化及重复投递不重复调用模型。
+接口约束参考 [Chat Completions API](https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create)和 [Java 17 HttpClient](https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpClient.html)。
 
-“真实 HTTP”指本地协议模拟服务，不代表已接入真实第三方模型。尚未验证供应商差异、TLS/远端故障、真实模型质量/价格或收费取消；未实现流式、多模型、自动重试、心跳/恢复或 XXL-JOB。达到进入 Phase 5 MVP 收尾条件；本轮提交后停止。
-
-原理参考：[OpenAI Docs Chat Completions](https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create)、[Java 17 HttpClient](https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpClient.html)。实现与实际验收是工程证据，文档引用用于协议/原理复盘。
-
-## 14. Phase5：生产定时闭环、有限性能与收尾
+## 14. 定时派发、故障与延迟验收
 
 用户要求真实独立JVM和自动扫描，不能继续用手动Dispatcher替代。初次只读预检有31旧PENDING、16旧NULL/NULL RUNNING和2未派发事件，即使终态消费不调用模型也会修改旧事件。暂停后获得明确授权，新增默认空的TASK_ACCEPTANCE_KEY_PREFIX，仅给扫描加参数化LIKE字面前缀，使用随机队列；不新增调度框架/表/模型重试。
 
-| 核心源码/脚本 | 原理与证据 | 面试问题 |
+| 核心源码/脚本 | 原理与证据 | 设计问题 |
 | --- | --- | --- |
 | TaskInputRules.validateAcceptancePrefix、StorageConfiguration | 字面前缀禁止通配符，显式mysql，默认关闭 | 为什么范围过滤不等于权限/租户隔离？前缀外提交会怎样？ |
 | JdbcOutboxRepository.claim、JdbcTaskRepository.expireRunning | 正常Scheduled自动执行，WHERE限制扫描范围 | 如何让真实集成验收不修改历史数据？为什么不能仅换MQ队列？ |
@@ -318,4 +281,4 @@ HTTP 请求期限包含等待响应头和完整 body；body 字节数受独立�
 
 实际成功JVM=46232、Java17.0.16、HTTP60736，MySQL8.0.45、Rabbit4.3.6；147本地测试通过。24SUCCESS/1MODEL_CALL_FAILED、25SENT、工作负载超时0，历史元数据一致；真实expiry回归会话50/51、单次超时更新。并发4/16样本受理p95=10.447ms、观察完成p95=1082.065ms，应用256MiB heap、1s派发轮询、Mock；样本小且无预热，不声称生产QPS/容量。原始CSV/失败记录/脚本见phase5-verification。
 
-最终学习顺序：TaskService输入与幂等→JDBC事务/唯一键→Outbox CAS和故障窗口→Rabbit confirm/ACK→Worker执行token与期限→HttpClient边界→Redis Lua原子性→生产验收证据和局限。对照resume-highlights与demo-guide准备演示，不再扩栈。第三方LLM从未调用；XXL-JOB、心跳/重跑/外部fencing、生产HA/监控未实现，不能写成既有能力。
+启动、复现步骤和部署范围见[部署指南](demo-guide.md)。详细环境、统计口径及异常批次见[独立服务验收](phase5-verification.md)。

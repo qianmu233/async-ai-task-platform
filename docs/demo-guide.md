@@ -1,8 +1,8 @@
-# P1 演示、部署与集中复盘
+# 运行、验证与部署指南
 
 > 2026-10-26 发布快照脱敏说明：Windows 用户目录以 `%USERPROFILE%` 展示，不是当时原始命令的字面路径；版本、运行 ID、测试结果和失败记录保留。
 
-## 最简安全启动（无基础设施、无费用）
+## 本地 Mock 模式
 
 在项目根目录使用现有 JDK 17，构建一次：
 
@@ -20,9 +20,9 @@ powershell -NoProfile -File scripts/stop-platform.ps1
 
 默认 memory/local/Mock。start 仅启动 P1 JAR，检查端口/存活/HTTP 就绪；stop 校验 PID、进程开始时间和 P1 路径，仅停止自己记录的 JVM。日志/PID 记录在 target；不停止 Docker、不清理数据。使用不同端口时 start 加 -Port、smoke 加 -BaseUrl。后台 stop 是进程停止，不承诺优雅排空；需要优雅关闭时前台 `java -jar ... --debug=false` 后 Ctrl+C。
 
-## 真实 MySQL / Rabbit /生产定时派发的一键验收
+## MySQL 与 RabbitMQ 定时派发验收
 
-本机 MySQL 已人工迁移 001→002→003，P1 Rabbit/Redis Docker 环境已建立。不重复执行迁移，不创建/清理基础设施。运行：
+先在隔离环境按 001→002→003 初始化 MySQL，并准备该项目的 RabbitMQ 容器。确认端口、凭据和表结构后运行：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-phase5.ps1 -JavaHome $env:JAVA_HOME
@@ -58,14 +58,12 @@ Invoke-RestMethod -Uri ('http://127.0.0.1:8081/api/tasks/'+$task.taskId+'/result
 
 ## 独立部署最小步骤
 
-1. 准备 Java17+、MySQL8.0.16+、独立 P1 Rabbit；Redis 可选。现有 Compose 是独立 P1 的端口/vhost/卷，不改 P2。
-2. 新环境由管理员审核顺序执行 database/001_init.sql、002_outbox.sql、003_worker_lease.sql，业务账号仅 SELECT/INSERT/UPDATE。本机三份均已执行，禁止再次盲跑；001 的 IF NOT EXISTS 不会升级旧表。
+1. 准备 Java 17、MySQL 8.0.16+ 和独立 RabbitMQ 实例。启用提交限流时另需 Redis。
+2. 新环境由管理员审核顺序执行 database/001_init.sql、002_outbox.sql、003_worker_lease.sql，业务账号仅 SELECT/INSERT/UPDATE。升级已有库前先核对表结构。001 的 IF NOT EXISTS 不会升级旧表。
 3. 构建 Maven JAR；通过进程环境配置 mysql/rabbit/outbox/Worker 期限和凭据，默认 Mock。所有环境变量完整表见 README；不用 Spring 自动 DDL。远端服务需自行配置网络隔离/认证/TLS，不将该未认证演示服务暴露公网。
-4. 上线前只读审核历史 PENDING/RUNNING/未派发事件与旧 Worker。本机已保留历史数据，不能直接开启无范围扫描。新独立数据库若初始为空且审核通过，可不设置 TASK_ACCEPTANCE_KEY_PREFIX，运行正常全库扫描。没有自动清理/回填/恢复旧记录。
-5. HTTP 模式只在用户授权后配置 MODEL_MODE/BASE_URL/API_KEY/NAME；请求期限+15000ms<=Worker期限。未授权不使用第三方模型。Redis/Outbox/超时保护配置失败明确拒绝，不回退。
+4. 上线前只读审核历史 PENDING/RUNNING/未派发事件与旧 Worker。使用已有数据库时，先核对扫描会涉及的记录。新独立数据库若初始为空且审核通过，可不设置 TASK_ACCEPTANCE_KEY_PREFIX，运行正常全库扫描。没有自动清理/回填/恢复旧记录。
+5. 使用 HTTP 模型时配置 `MODEL_MODE`、`MODEL_BASE_URL`、`MODEL_API_KEY` 和 `MODEL_NAME`。模型请求期限至少比 Worker 期限短 15000 ms。
 
-## 5 分钟讲解顺序
+## 验证任务链路
 
-先演示提交与状态/结果查询；解释 PENDING→RUNNING→SUCCESS/FAILED。接着展示 task/event 同事务和 scheduling-1 的 confirm 日志；再用同键重试说明唯一键幂等。最后讲 token/deadline 保护、模型错误分类、Redis 只负责限流，以及真实测试和模拟模型的边界。
-
-复盘按 project-review.md 的源码表学习：TaskService → JdbcTaskRepository → JdbcOutboxRepository/OutboxDispatcher → RabbitTaskConsumer → TaskWorker → ModelClient。重点理解锁顺序、事务结束后调用模型、失败结果与派发状态区分。性能仅为本机小样本，不展示“生产 QPS”；不宣称 XXL-JOB、exactly-once、真实模型质量或线上收益。
+提交任务后通过状态和结果接口核对 PENDING、RUNNING 与终态。相同键与输入返回原任务，变更同键输入返回冲突。持久化模式中，可从派发记录检查 confirm 和 `SENT`，从任务记录检查执行令牌、超时及模型结果。[状态与并发设计](project-review.md) · [独立服务验收](phase5-verification.md)

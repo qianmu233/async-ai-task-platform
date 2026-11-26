@@ -1,6 +1,6 @@
 # 003：执行所有权/超时字段人工迁移
 
-2026-10-14：**用户已确认人工执行 003，并授权真实 MySQL 验收；不要重复执行迁移。** Codex 不执行 DDL 或数据回填；验收先只读核对字段类型、索引、执行所有权/原生命周期 CHECK 和业务账号最小权限，再创建本轮随机任务。脚本 database/003_worker_lease.sql 只修改 P1 的 ai_task_platform.ai_text_task。
+2026-10-14 的 MySQL 真实验收先只读核对字段、索引、执行所有权约束、生命周期约束和业务权限，再创建隔离验收任务。[003_worker_lease.sql](../database/003_worker_lease.sql) 更新 `ai_task_platform.ai_text_task`。
 
 ## 最小增量
 
@@ -19,9 +19,9 @@
 
 ## 用户最少操作
 
-**本机人工迁移已完成，无需再次执行。** 新环境仍须使用本机数据库管理员审核执行 database/003_worker_lease.sql；不用业务账号执行 DDL，不把管理员密码粘贴聊天或命令参数。不重新执行 001/002，不重建表或清理数据；同名字段/约束已存在时先停止、对比结构，不能覆盖。
+新环境由数据库管理员审核并执行 [003_worker_lease.sql](../database/003_worker_lease.sql)。已有同名字段或约束时，先比对实际结构。业务账号只需读写权限。
 
-管理员执行后只读核对 SHOW CREATE TABLE：确认两个字段、索引和 CHECK 已创建且生效，原生命周期 CHECK 保留。Codex 本轮不会代为执行 ALTER。
+管理员执行后只读核对 SHOW CREATE TABLE：确认两个字段、索引和 CHECK 已创建且生效，原生命周期 CHECK 保留。执行后再启动依赖该列和约束的 Worker。
 
 ## 迁移后的自动验收
 

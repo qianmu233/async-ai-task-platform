@@ -1,6 +1,6 @@
 # Phase 4A 验收：真实 MySQL/RabbitMQ Outbox 核心验收通过
 
-日期：2026-10-14，Asia/Shanghai。**11:41:41 完整 verify：130 项离线＋1 项真实 MySQL/RabbitMQ Outbox 综合测试通过，0 failures/errors/skipped，退出 0。达到 Phase 4A 核心验收条件，按授权安全检查后建立本地检查点，不 push，不进入 Phase 4B。** 用户已人工执行并核对 002_outbox.sql；本轮 Codex 只读核对结构/权限，没有执行额外 DDL，也未修改生产代码或扩展测试数量。
+日期：2026-10-14，Asia/Shanghai。**11:41:41 完整 verify：130 项离线＋1 项真实 MySQL/RabbitMQ Outbox 综合测试通过，0 failures/errors/skipped，退出 0。覆盖 Phase 4A 核心验收条件。** 数据库管理员已完成 002 迁移。验收只读核对结构和权限。
 
 ## Phase 3A/3B Git 检查点
 
@@ -13,7 +13,7 @@ f4ba045 feat: add verified RabbitMQ dispatch and Redis submission limits
 
 提交前 77 个 tracked/untracked 候选文件：产物/.env/日志/密钥路径 0，凭据特征 0；本地读取已校验 owner=p1 的 MQ/Redis 运行时密码及 XML/URL 编码形式精确匹配 0。没有外部工具接收凭据。精确扫描仅涵盖已知 P1 MQ/Redis 秘密，不声称证明任意秘密不存在。暂存仅 37 个已审源码/配置模板/文档/脚本，diff --cached --check 通过，提交后工作区干净。没有 reset/clean/push。
 
-Phase 3A 历史真实 MQ/MySQL、Phase 3B 真实 Redis 证据留在该提交及 target；本轮未重跑它们。Phase 4A 改动发生在该检查点后，本次按用户授权建立独立本地检查点，提交主题为 `feat: add verified transactional outbox dispatch`，实际 ID 以 Git 历史/最终报告为准，不 push。
+前序结果见 [RabbitMQ / MySQL 记录](phase3a-verification.md)和[Redis 记录](phase3b-verification.md)。本阶段单独验证 Outbox。
 
 ## 实现闭环
 
@@ -32,7 +32,7 @@ SENT 是 Broker 确认且有路由，不是消费/模型成功。confirm 丢失�
 | repository/OfflineJdbcFixture.java、TaskOutboxTransactionTest.java | 最小扩展原 fixture，验证两写事务契约及回滚 |
 | outbox/OutboxDispatcherTest.java、config/OutboxConfigurationTest.java | 调度成功/失败/重复/竞争、有效令牌、默认及启用配置 |
 | repository/TaskPipelineOutboxIT.java、scripts/verify-outbox.ps1 | 显式迁移审批后的真实联合验收，本次实际通过 |
-| README、docs/project-review.md、docs/outbox-migration-review.md、本报告 | 配置、原理/面试、审核步骤与证据边界 |
+| README、docs/project-review.md、docs/outbox-migration-review.md、本报告 | 配置、设计、迁移步骤与证据范围 |
 
 Java 生产前缀 src/main/java/com/example/aitask；测试前缀 src/test/java/com/example/aitask；YAML 为 src/main/resources/application.yml。原 TaskService、Publisher、Consumer、Worker 和 Redis 代码未修改；任务注册内部扩展，原认领/终态 SQL 保留。
 
@@ -121,6 +121,6 @@ RabbitMQ **4.3.6** / ai-task-platform-rabbitmq healthy。只读 list_queues 检�
 
 未验证：真实进程崩溃、DB/MQ 断网或提交结果丢包、Broker 重启/磁盘耐久性、跨 JVM Outbox 派发与吞吐/性能、JDK 17 运行。当前 JDK 25、Java 17 release。只等待 confirm 的时限不代表已验证所有连接/通道阻塞的总耗时上界；Broker 故障实验留待后续。
 
-用户人工完成 DDL；本轮 Codex 没有 DDL、旧数据操作、数据/卷清理、P2/XXL-JOB 修改或真实收费模型。真实测试只创建/修改本轮任务与事件。按用户授权建立 Phase 4A 本地提交，不 push。**达到 Phase 4A 核心验收条件，本轮停止等待审核，不立即开发 Phase 4B。**
+真实测试只创建并更新本批次的任务与事件，使用 Mock 模型。数据库结构及业务账号权限在执行前核验。
 
 初版安全检查（提交前）：git diff --check 通过，产物/.env/日志/密钥路径及凭据特征 0；P1 MQ/Redis 密码精确扫描 468 个文本命中 0。本次真实验收后，在本地对 **515** 个文本/日志/XML 精确扫描 **实际 MySQL/RabbitMQ/Redis** 密码及 XML/URL 编码形式，命中 0；秘密未放入源码/文件/命令参数或外部连接器。父环境密码及 schema approval 标志未留存。只提交审查过的源码/SQL/脚本/文档，target/.env/本地配置继续忽略。

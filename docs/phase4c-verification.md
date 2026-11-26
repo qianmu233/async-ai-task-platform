@@ -14,7 +14,7 @@
 | repository/TaskPipelineModelHttpIT.java、pom.xml | model-http-it 显式 profile，真实 MySQL/Rabbit/HTTP 链路，不访问第三方端点 |
 | scripts/verify-model-http.ps1、scripts/verify-outbox.ps1 | 复用安全交互凭据/专用 Broker 检查/独立报告；原 Outbox 默认入口兼容 |
 | repository/TaskPipelineRabbitIT.java | 旧计数 Mock 配置加专用 profile，保留旧测试并阻止污染新模型装配 |
-| README.md、docs/project-review.md、本报告 | 配置、证据、源码/面试问题和能力边界 |
+| README.md、docs/project-review.md、本报告 | 配置、实现、验收结果和范围 |
 
 生产前缀 src/main/java/com/example/aitask；测试前缀 src/test/java/com/example/aitask。没有新依赖/表/API。Mock 和未知旧客户端异常仍 MODEL_CALL_FAILED；HTTP 使用 MODEL_TIMEOUT/RATE_LIMITED/AUTH_FAILED/UPSTREAM_UNAVAILABLE/REQUEST_REJECTED/HTTP_ERROR/RESPONSE_INVALID/RESPONSE_TOO_LARGE/TRANSPORT_FAILED/INTERRUPTED。失败结果沿用 HTTP 409 的原 DTO。
 
@@ -54,10 +54,10 @@ MODEL_HTTP_IT RESULT run=2dbe66d5-5303-45a4-950e-d0619484f211 mysql=8.0.45 local
 
 ## 重跑和边界
 
-默认 `mvn verify` 不连接 MySQL/MQ/外部模型，只执行本地测试（含 loopback HTTP）。真实基础设施链路需显式 opt-in：确认已人工迁移 002/003，设置 OUTBOX_IT_SCHEMA_APPROVED=true、WORKER_LEASE_IT_SCHEMA_APPROVED=true 后执行 `scripts/verify-model-http.ps1 -UseP1Broker`；缺审批/密码明确拒绝，不降级。脚本复用现有安全终端密码输入，-NonInteractive 需外部 MYSQL_IT_PASSWORD。不要将密码/API Key 粘贴聊天、命令参数或配置文件。
+默认 `mvn verify` 不连接 MySQL/MQ/外部模型，只执行本地测试（含 loopback HTTP）。真实基础设施链路需显式 opt-in：确认已人工迁移 002/003，设置 OUTBOX_IT_SCHEMA_APPROVED=true、WORKER_LEASE_IT_SCHEMA_APPROVED=true 后执行 `scripts/verify-model-http.ps1 -UseP1Broker`；缺审批/密码明确拒绝，不降级。脚本复用现有安全终端密码输入，-NonInteractive 需外部 MYSQL_IT_PASSWORD。密码与 API Key 由本地进程环境传入。
 
-真实第三方适配仍需用户明确授权和安全 API Key 才可执行，本阶段不阻塞于此。尚未验证供应商特定协议/TLS/质量/费用、远端网络故障、真实取消、JDK 17 运行（本机 JDK 25、release 17）、跨 JVM 崩溃或性能指标。适配只接受纯文本完整 stop 结果，无流式/tool_calls/重试；客户端取消不能保证上游未执行/未收费。既有 NULL/NULL RUNNING 不自动恢复，无 heartbeat/续期/外部 fencing/XXL-JOB。
+该次验收使用本地模型协议桩。尚未验证供应商特定协议/TLS/质量/费用、远端网络故障、真实取消、JDK 17 运行（本机 JDK 25、release 17）、跨 JVM 崩溃或性能指标。适配只接受纯文本完整 stop 结果，无流式/tool_calls/重试；客户端取消不能保证上游未执行/未收费。既有 NULL/NULL RUNNING 不自动恢复，无 heartbeat/续期/外部 fencing/XXL-JOB。
 
 PowerShell 两个入口 AST 0 错误；父进程没有审批标记时，新入口非交互执行退出 2，在凭据读取/连接前拒绝。提交前核对 111 个 tracked/untracked 候选文件：禁止产物路径 0、凭据特征命中文件 0；真实验收日志/XML/JSON 同类特征命中 0。该启发式扫描不能证明任意秘密不存在；结合环境传入方式和人工差异审查，暂存仅本阶段 18 个文件。父进程未遗留 MYSQL/DB/MQ/MODEL 密码或 002/003 审批变量，git diff --check 通过；target/.env/日志/本地密码配置保持忽略。
 
-**满足 Phase 4C 最小可用适配与工程链路门槛，可以进入 Phase 5 收尾；尚未达到真实第三方模型验收。** 本轮按明确授权进行敏感文件检查后本地提交，不 push；完成后停止。
+此阶段验证了模型 HTTP 协议和联合任务链路。独立服务的部署与延迟验证见 [Phase 5](phase5-verification.md)。

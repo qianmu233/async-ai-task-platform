@@ -2,7 +2,7 @@
 
 > 2026-10-26 发布快照脱敏说明：Windows 用户目录以 `%USERPROFILE%` 展示，不是当时原始命令的字面路径；版本、运行 ID、测试结果和失败记录保留。
 
-日期：2026-10-14，Asia/Shanghai；开发基线 adfc5da。**Java17、真实独立服务/生产定时派发、小规模延迟、必要回归和启动拒绝验收均已通过，达到简历级 MVP 收尾条件。** 按授权本地提交，不 push；停止开发。第三方模型调用 0 次，不声称生产性能/HA。
+日期：2026-10-14，Asia/Shanghai；开发基线 adfc5da。**Java17、真实独立服务/生产定时派发、小规模延迟、必要回归和启动拒绝验收均已通过，覆盖该阶段的工程验收范围。** 测试使用 Mock，第三方模型调用 0 次。
 
 ## 功能范围与环境
 
@@ -75,10 +75,10 @@ P2 mysql-erp/rag-demo/pgvector 与现有卷保留，没有容器/队列/数据�
 
 采样用System.nanoTime，HTTP受理=POST开始到202响应，观察完成=POST开始到轮询终态并取结果；轮询25ms，包含GET/客户端等待成本。百分位为nearest-rank；顺序p95为8个样本最大值，含冷启动后首次受理，样本不足以推导服务器容量。主要完成延迟体现默认1s Outbox轮询；不编造QPS/生产吞吐、线上规模或收益。原始samples.csv可复核。
 
-## 部署、复盘与能力边界
+## 部署与恢复边界
 
-README包含真实架构Mermaid、API、模式/环境、安全启动、001/002/003顺序和限制。demo-guide含一键演示/独立部署/5分钟讲解；resume-highlights区分实现、真实基础设施、本地模拟HTTP和未调用第三方模型；project-review索引源码/原理/面试问题。
+架构、API 和启动方式见 [README](../README.md)，数据库迁移次序与环境要求见[部署指南](demo-guide.md)，源码及状态流见[系统设计](project-review.md)。
 
 既有NULL/NULL RUNNING不自动恢复，旧PENDING不补Outbox，隔离/parking不自动重放；没有模型重试/心跳/续期/外部fencing/XXL-JOB、真实模型质量费用、Broker HA/崩溃耐久性、Kubernetes/生产监控。系统故障可能延迟超时扫描，存储完成未知可遗留RUNNING；不承诺所有错误自动恢复、外部调用取消或exactly-once。
 
-全部凭据经本机安全输入/进程环境传入，没有DDL或数据清理。提交前119个候选文件、成功批次日志/XML/CSV/JSON的凭据特征扫描命中0，禁止产物/密钥路径0；该启发式检查结合差异审核，不声称能识别任意秘密。父进程未留下MYSQL/DB/MQ/MODEL密码或审批标志，target/.env/日志保持忽略；git diff --check及4个PowerShell入口AST通过。仅暂存本阶段19个源码/测试/脚本/文档，按授权本地提交，不push；**项目核心MVP收尾完成，停止开发，等待简历审核和集中学习**。
+全部凭据经本机安全输入/进程环境传入，没有DDL或数据清理。提交前119个候选文件、成功批次日志/XML/CSV/JSON的凭据特征扫描命中0，禁止产物/密钥路径0；该启发式检查结合差异审核，不声称能识别任意秘密。父进程未留下MYSQL/DB/MQ/MODEL密码或审批标志，target/.env/日志保持忽略；git diff --check及4个PowerShell入口AST通过。本节结论适用于此次检查覆盖的文件与验收产物。
